@@ -1,0 +1,285 @@
+# ╔════════════════════════════════════════════════════════════════════════════════════════════╗
+# ║                                                                                            ║
+# ║   .S_sSSs     .S_SSSs     .S     S.     sSSs    sSSs    sSSs_sSSs     .S_SsS_S.     sSSs   ║
+# ║  .SS~YS%%b   .SS~SSSSS   .SS     SS.   d%%SP   d%%SP   d%%SP~YS%%b   .SS~S*S~SS.   d%%SP   ║
+# ║  S%S   `S%b  S%S   SSSS  S%S     S%S  d%S'    d%S'    d%S'     `S%b  S%S `Y' S%S  d%S'     ║
+# ║  S%S    S%S  S%S    S%S  S%S     S%S  S%S     S%|     S%S       S%S  S%S     S%S  S%S      ║
+# ║  S%S    d*S  S%S SSSS%S  S%S     S%S  S&S     S&S     S&S       S&S  S%S     S%S  S&S      ║
+# ║  S&S   .S*S  S&S  SSS%S  S&S     S&S  S&S_Ss  Y&Ss    S&S       S&S  S&S     S&S  S&S_Ss   ║
+# ║  S&S_sdSSS   S&S    S&S  S&S     S&S  S&S~SP  `S&&S   S&S       S&S  S&S     S&S  S&S~SP   ║
+# ║  S&S~YSSY    S&S    S&S  S&S     S&S  S&S       `S*S  S&S       S&S  S&S     S&S  S&S      ║
+# ║  S*S         S*S    S&S  S*S     S*S  S*b        l*S  S*b       d*S  S*S     S*S  S*b      ║
+# ║  S*S         S*S    S*S  S*S  .  S*S  S*S.      .S*P  S*S.     .S*S  S*S     S*S  S*S.     ║
+# ║  S*S         S*S    S*S  S*S_sSs_S*S   SSSbs  sSS*S    SSSbs_sdSSS   S*S     S*S   SSSbs   ║
+# ║  S*S         SSS    S*S  SSS~SSS~S*S    YSSP  YSS'      YSSP~YSSY    SSS     S*S    YSSP   ║
+# ║  SP                 SP                                                       SP            ║
+# ║  Y    ARCH THEME    Y     MADE BY CHOOI    admin@redline-software.moscow     Y             ║
+# ║                                                                                            ║
+# ╚════════════════════════════════════════════════════════════════════════════════════════════╝
+
+
+# # # # # # # # # # # # # # # # # # Quality of life features # # # # # # # # # # # # # # # # # #
+
+# Change keyboard layout {MacOS style}
+super + space
+  {setxkbmap us, setxkbmap ru}
+
+# Cut {MacOS style}
+super + x
+  xte "keyup x" "keyup Super_L" "keydown Control_L" "key x" "keyup Control_L" "keydown Super_L"
+
+# Copy {MacOS style}
+super + c
+  ~/.config/sxhkd/script/if_matches_window.sh --not --class "xfce4-terminal" -- xte "keyup c" "keyup Super_L" "keydown Control_L"                   "key c"                 "keyup Control_L" "keydown Super_L" ; \
+  ~/.config/sxhkd/script/if_matches_window.sh       --class "xfce4-terminal" -- xte "keyup c" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key c" "keyup Shift_L" "keyup Control_L" "keydown Super_L"
+
+# Insert {MacOS style}
+super + v
+  ~/.config/sxhkd/script/if_matches_window.sh --not --class "xfce4-terminal" -- xte "keyup v" "keyup Super_L" "keydown Control_L"                   "key v"                 "keyup Control_L" "keydown Super_L" ; \
+  ~/.config/sxhkd/script/if_matches_window.sh       --class "xfce4-terminal" -- xte "keyup v" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key v" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
+
+# Save {MacOS style}
+super + s
+  xte "keyup s" "keyup Super_L" "keydown Super_L" "keyup Super_L" "keydown Control_L" "key s" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
+
+# Super save {MacOS style}
+super + shift + s
+  xte "keyup s" "keyup Super_L" "keydown Control_L" "key s" "keyup Control_L" "keydown Super_L"
+
+# Redo {MacOS style}
+super + y
+  xte "keyup y" "keyup Super_L" "keydown Super_L" "keyup Super_L" "keydown Control_L" "key y" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
+
+# Redo alt {MacOS style}
+super + shift + z
+  xte "keyup z" "keyup Super_L" "keydown Control_L" "key z" "keyup Control_L" "keydown Super_L"
+
+# Undo {MacOS style}
+super + z
+  xte "keyup z" "keyup Super_L" "keydown Super_L" "keyup Super_L" "keydown Control_L" "key z" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
+
+# Find {MacOS style}
+super + f
+  xte "keyup f" "keyup Super_L" "keydown Super_L" "keyup Super_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
+
+# Super find {MacOS style}
+super + shift + f
+  xte "keyup f" "keyup Super_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Super_L"
+
+# Select all text
+super + a
+  xte "keyup a" "keyup Super_L" "keydown Super_L" "keyup Super_L" "keydown Control_L" "key a" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
+
+# # # # # # # # # # # # # # # # # # # # # ROIF  keybinds # # # # # # # # # # # # # # # # # # # #
+
+# DRun (program launcher) {MacOS style}
+alt + space
+	bash ~/.config/rofi/scripts/appsmenu.sh
+
+# DRun (program launcher) {Arch style}
+super + d
+	bash ~/.config/rofi/scripts/appsmenu.sh
+
+# DRun (list of open windows) {MacOS style}
+shift + alt + space
+	bash ~/.config/rofi/scripts/windowmenu.sh
+
+# DRun (list of open windows) {Arch style}
+shift + super + d
+	bash ~/.config/rofi/scripts/windowmenu.sh
+
+# DRun (list of ssh sesssions) {MacOS style}
+control + alt + space
+	bash ~/.config/rofi/scripts/sshmenu.sh
+
+# DRun (list of ssh sesssions) {Arch style}
+control + super + d
+	bash ~/.config/rofi/scripts/sshmenu.sh
+
+# Power Menu 
+super + shift + e
+  bash ~/.config/rofi/powermenu.sh
+
+
+# # # # # # # # # # # # # # # # # # # Reload  applications # # # # # # # # # # # # # # # # # # #
+
+# Reload sxhkd configuration files:
+super + Escape
+	pkill -USR1 -x sxhkd
+
+# Restart bspwm
+super + alt + p
+	bash ~/.config/polybar/scripts/launch.sh
+
+# Restart bspwm
+super + alt + r
+	bspc wm -r
+	
+# Quit bspwm
+super + alt + q
+	bspc quit
+
+# Quit selected application
+super + {_,shift + }q
+	bspc node -{c,k}
+
+
+# # # # # # # # # # # # # # # # # # # Start applications # # # # # # # # # # # # # # # # # # # #
+
+# Terminal
+super + shift + Return
+	xfce4-terminal
+
+
+# # # # # # # # # # # # # # # # # # # Desktop  utilities # # # # # # # # # # # # # # # # # # # #
+
+### Change desktop
+
+# Go to next/previous desktop in the current monitor
+super + {Left,Right}
+	bspc desktop -f {prev,next}
+
+# Go to next/previous desktop in the current monitor and carry application
+super + shift + {Left,Right}
+    id=$(bspc query --nodes --node); bspc node --to-desktop {prev,next}; bspc desktop -f next; bspc node -f ${id}
+
+# Go to or send to the given desktop
+super + {_,shift + }{1-9,0}
+	bspc {desktop -f,node -d} '^{1-9,10}'
+
+
+### Move/Resize window
+
+# Move a floating window
+super + alt + {Left,Down,Up,Right}
+	bspc node -v {-20 0,0 20,0 -20,20 0}
+
+
+# alternate between the tiled and monocle layout
+super + m
+	bspc desktop -l next
+
+# send the newest marked node to the newest preselected node
+super + y
+	bspc node newest.marked.local -n newest.!automatic.local
+
+# swap the current node and the biggest window
+super + g
+	bspc node -s biggest.window
+
+#
+# state/flags
+#
+
+# set the window state
+super + alt + {t,shift + t,s,f}
+	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
+
+# set the node flags
+# super + ctrl + {m,x,y,z}
+#	bspc node -g {marked,locked,sticky,private}
+
+#
+# focus/swap
+#
+
+# focus the node in the given direction
+super + {_,shift + }{h,j,k,l}
+	bspc node -{f,s} {west,south,north,east}
+
+# focus the node for the given path jump
+super + {p,b,comma,period}
+	bspc node -f @{parent,brother,first,second}
+
+# focus the next/previous window in the current desktop
+super + {_,shift + }c
+	bspc node -f {next,prev}.local.!hidden.window
+
+
+# focus the last node/desktop
+super + {grave,Tab}
+	bspc {node,desktop} -f last
+
+# focus the older or newer node in the focus history
+super + {o,i}
+	bspc wm -h off; \
+	bspc node {older,newer} -f; \
+	bspc wm -h on
+
+
+#
+# preselect
+#
+
+# preselect the direction
+super + ctrl + {h,j,k,l}
+	bspc node -p {west,south,north,east}
+
+# preselect the ratio
+super + ctrl + {1-9}
+	bspc node -o 0.{1-9}
+
+# cancel the preselection for the focused node
+super + ctrl + space
+	bspc node -p cancel
+
+# cancel the preselection for the focused desktop
+super + ctrl + shift + space
+	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
+
+#
+# move/resize
+#
+
+# expand a window by moving one of its side outward
+super + alt + {h,j,k,l}
+	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+
+# contract a window by moving one of its side inward
+super + alt + shift + {h,j,k,l}
+	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+
+
+#
+# Special hotkeys
+#
+
+# Multimedia keys
+XF86AudioRaiseVolume
+  amixer -q set Master 5%+ unmute
+
+# Still multimedia
+XF86AudioLowerVolume
+  amixer -q set Master 5%- unmute
+
+# still
+XF86AudioMute
+  amixer -D pulse sset Master toggle-mute
+  
+# amixer -q set Master toggle
+# Simple amixer command seems to have problems unmuting device
+
+# Brightness up
+XF86MonBrightnessUp
+  xbacklight -inc 5
+
+# And brightness down
+XF86MonBrightnessDown
+  xbacklight -dec 5
+
+# Screenshot
+Print
+  scrot "$(xdg-user-dir PICTURES)/screenshot-$(date +%F_%T).png"
+
+super + Print
+  ~/.config/bspwm/scripts/screenshot.sh
+
+# Shortcuts
+super + w 
+  firefox
+
+super + n 
+  thunar  
+
+super + F1
+  ~/.config/bspwm/scripts/keybindings_rofi.sh

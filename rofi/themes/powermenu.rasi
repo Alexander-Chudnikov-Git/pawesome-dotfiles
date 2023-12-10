@@ -1,0 +1,94 @@
+/*
+# ╔════════════════════════════════════════════════════════════════════════════════════════════╗
+# ║                                                                                            ║
+# ║   .S_sSSs     .S_SSSs     .S     S.     sSSs    sSSs    sSSs_sSSs     .S_SsS_S.     sSSs   ║
+# ║  .SS~YS%%b   .SS~SSSSS   .SS     SS.   d%%SP   d%%SP   d%%SP~YS%%b   .SS~S*S~SS.   d%%SP   ║
+# ║  S%S   `S%b  S%S   SSSS  S%S     S%S  d%S'    d%S'    d%S'     `S%b  S%S `Y' S%S  d%S'     ║
+# ║  S%S    S%S  S%S    S%S  S%S     S%S  S%S     S%|     S%S       S%S  S%S     S%S  S%S      ║
+# ║  S%S    d*S  S%S SSSS%S  S%S     S%S  S&S     S&S     S&S       S&S  S%S     S%S  S&S      ║
+# ║  S&S   .S*S  S&S  SSS%S  S&S     S&S  S&S_Ss  Y&Ss    S&S       S&S  S&S     S&S  S&S_Ss   ║
+# ║  S&S_sdSSS   S&S    S&S  S&S     S&S  S&S~SP  `S&&S   S&S       S&S  S&S     S&S  S&S~SP   ║
+# ║  S&S~YSSY    S&S    S&S  S&S     S&S  S&S       `S*S  S&S       S&S  S&S     S&S  S&S      ║
+# ║  S*S         S*S    S&S  S*S     S*S  S*b        l*S  S*b       d*S  S*S     S*S  S*b      ║
+# ║  S*S         S*S    S*S  S*S  .  S*S  S*S.      .S*P  S*S.     .S*S  S*S     S*S  S*S.     ║
+# ║  S*S         S*S    S*S  S*S_sSs_S*S   SSSbs  sSS*S    SSSbs_sdSSS   S*S     S*S   SSSbs   ║
+# ║  S*S         SSS    S*S  SSS~SSS~S*S    YSSP  YSS'      YSSP~YSSY    SSS     S*S    YSSP   ║
+# ║  SP                 SP                                                       SP            ║
+# ║  Y    ARCH THEME    Y     MADE BY CHOOI    admin@redline-software.moscow     Y             ║
+# ║                                                                                            ║
+# ╚════════════════════════════════════════════════════════════════════════════════════════════╝
+*/
+
+@import "~/.config/rofi/themes/shared/colorschemes/current-theme.rasi"
+@import "~/.config/rofi/themes/shared/fonts/current-fonts.rasi"        /* Yeah, I'm not really using it, but why not? */
+
+configuration {
+  show-icons:          true;
+  drun-display-format: "{icon}{name}";
+  disable-history:     true;
+  sidebar-mode:        true;
+  hide-scrollbar:      true;
+  markup-rows:         true;
+  search:              false;
+}
+
+* {
+  background-color: @background-dark;
+  font:             "Rubik Regular 9";
+  location:         north west;
+  y-offset:         39;
+  x-offset:         2;
+}
+
+window {
+  transparency: "real";
+  width:        200px;
+  height:       200px;
+}
+
+mainbox {
+  background-color: @background-dark;
+  children:         [ listview ];
+}
+
+listview {
+  columns:          1;
+  spacing:          5px;
+  fixed-columns:    true;
+  background-color: transparent;
+  padding:          20px 20px 0px 20px;
+  cycle:            false;
+  dynamic:          true;
+  layout:           vertical;
+}
+
+element {
+  orientation: horizontal;
+  background-color: transparent;
+  padding: 0px 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+element selected {
+  background-color: @background-hover;
+}
+
+element-text {
+  horizontal-align: 0;
+  color: @foreground-dark;
+  background-color: transparent;
+  padding: 10px 5px;
+  cursor: inherit;
+}
+
+element-icon {
+  background-color: transparent;
+  size: 24;
+  horizontal-align: 0;
+  cursor: inherit;
+}
+
+element-text selected {
+  color: @accent-yellow;
+}
