@@ -20,9 +20,9 @@
 */
 
 * {
-    background-dark:      #0B0A0955;
-    background-semilight: #16141255;
-    background-light:     #2D292555;
+    background-dark:      #0B0A0988;
+    background-semilight: #16141288;
+    background-light:     #2D292588;
     foreground-dark:      #A3998FCC;
     foreground-semilight: #ACA39A;
     foreground-light:     #B6ADA5;

@@ -30,13 +30,13 @@ super + x
 
 # Copy {MacOS style}
 super + c
-  ~/.config/sxhkd/script/if_matches_window.sh --not --class "xfce4-terminal" -- xte "keyup c" "keyup Super_L" "keydown Control_L"                   "key c"                 "keyup Control_L" "keydown Super_L" ; \
-  ~/.config/sxhkd/script/if_matches_window.sh       --class "xfce4-terminal" -- xte "keyup c" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key c" "keyup Shift_L" "keyup Control_L" "keydown Super_L"
+  ~/.config/sxhkd/script/if_matches_window.sh --not --class "kitty" -- xte "keyup c" "keyup Super_L" "keydown Control_L"                   "key c"                 "keyup Control_L" "keydown Super_L" ; \
+  ~/.config/sxhkd/script/if_matches_window.sh       --class "kitty" -- xte "keyup c" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key c" "keyup Shift_L" "keyup Control_L" "keydown Super_L"
 
 # Insert {MacOS style}
 super + v
-  ~/.config/sxhkd/script/if_matches_window.sh --not --class "xfce4-terminal" -- xte "keyup v" "keyup Super_L" "keydown Control_L"                   "key v"                 "keyup Control_L" "keydown Super_L" ; \
-  ~/.config/sxhkd/script/if_matches_window.sh       --class "xfce4-terminal" -- xte "keyup v" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key v" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
+  ~/.config/sxhkd/script/if_matches_window.sh --not --class "kitty" -- xte "keyup v" "keyup Super_L" "keydown Control_L"                   "key v"                 "keyup Control_L" "keydown Super_L" ; \
+  ~/.config/sxhkd/script/if_matches_window.sh       --class "kitty" -- xte "keyup v" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key v" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
 
 # Save {MacOS style}
 super + s
@@ -128,7 +128,7 @@ super + {_,shift + }q
 
 # Terminal
 super + shift + Return
-	xfce4-terminal
+	kitty
 
 # Screenshot 
 Print
@@ -157,7 +157,6 @@ super + {_,shift + }{1-9,0}
 # Move a floating window
 super + alt + {Left,Down,Up,Right}
 	bspc node -v {-20 0,0 20,0 -20,20 0}
-
 
 # alternate between the tiled and monocle layout
 super + m
@@ -236,11 +235,11 @@ super + ctrl + shift + space
 #
 
 # expand a window by moving one of its side outward
-super + alt + {h,j,k,l}
+super + alt + shift + {Left,Down,Up,Right}
 	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
 
 # contract a window by moving one of its side inward
-super + alt + shift + {h,j,k,l}
+super + alt + ctrl + {Left,Down,Up,Right}
 	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
 
 
@@ -284,6 +283,9 @@ super + w
 
 super + n 
   thunar  
+
+super + t
+  kitty 
 
 super + F1
   ~/.config/bspwm/scripts/keybindings_rofi.sh

@@ -52,9 +52,14 @@ bspc config borderless_monocle    true
 bspc config gapless_monocle       true
 bspc config pointer_follows_focus true
 bspc config focus_follows_pointer true
+bspc config pointer_modifier super
+bspc config pointer_action1 move
+
+# Smooth animations
+bspc config pointer_motion_interval 60
 
 # Desktops apps
-declare -a terminal=()
+declare -a terminal=(kitty)
 declare -a main_git=(Sublime\ Merge Sublime_merge sublime_merge smerge)
 declare -a main_editor=(Sublime\ Text Sublime_text sublime_text subl nvim vim)
 declare -a browser=(firefox)
@@ -78,7 +83,7 @@ setup_desktop 9  "${music[@]}"
 setup_desktop 10 "${misc[@]}"
 
 # Floating Apps
-declare -a floatingApps=(dolphin Dolphin URxvt alacritty Alacritty xterm xfce xfce4 Xfce4-terminal xfce4-terminal xdman-Main Lxappearance Gparted Thunar \
+declare -a floatingApps=(dolphin Dolphin URxvt Alacritty xterm xfce xfce4 Xfce4-terminal xfce4-terminal xdman-Main Lxappearance Gparted Thunar \
 Viewnior Xarchiver Pavucontrol firefox:Dialog firefox:Browser \
 firefox:Pop-up nitrogen Gpick)
 for i in ${floatingApps[@]}; do
@@ -88,11 +93,11 @@ for i in ${floatingApps[@]}; do
 # Floating media
 declare -a floatingCust=(*:*:Picture-in-picture *:Toolkit:Picture-in-Picture mpv)
 for i in ${floatingCust[@]}; do
-    bspc rule -a $i state=floating sticky=on follow=off focus=on \
+    bspc rule -a $i state=floating sticky=on follow=on focus=on \
     rectangle=500x300+1366+50; done
 
 # Start screen 
-bspc rule -a cava state=floating desktop='^1' focus=on follow=off rectangle=600x200+10+40;
+bspc rule -a cava state=floating focus=on follow=off rectangle=600x200+10+40;
 
 # Load autostart script
 ~/.config/bspwm/autostart
