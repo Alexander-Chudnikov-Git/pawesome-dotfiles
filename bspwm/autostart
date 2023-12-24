@@ -43,8 +43,19 @@ nm-applet --indicator &
 # Cursor
 xsetroot -cursor_name left_ptr &
 
+# File manager
+thunar --daemon
+
 # Low battery notifier
 ~/.config/bspwm/scripts/low_bat_notifier.sh
+
+# Memory fix
+~/.config/bspwm/scripts/thundar_memory_fix.sh
+
+# Screenshot
+flameshot &
+
+# Language change
 
 setxkbmap -layout us,ru
 setxkbmap -option 'grp:win_space_toggle'

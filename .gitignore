@@ -22,10 +22,14 @@ QtProject/
 libreoffice/
 Kitware/
 lximage-qt/
+yay/
 EOS-greeter.conf
 eos-update-notifier.first_init
 mimeapps.list
 QtProject.conf
 user-dirs.dirs
 user-dirs.locale
-
+baloofilerc
+dolphinrc
+knfsshare
+window-geometry.conf

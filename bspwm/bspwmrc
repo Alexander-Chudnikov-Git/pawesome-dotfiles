@@ -78,7 +78,7 @@ setup_desktop 9  "${music[@]}"
 setup_desktop 10 "${misc[@]}"
 
 # Floating Apps
-declare -a floatingApps=(dolphin Dolphin URxvt xterm xfce xfce4 Xfce4-terminal xfce4-terminal xdman-Main Lxappearance Gparted Thunar \
+declare -a floatingApps=(dolphin Dolphin URxvt alacritty Alacritty xterm xfce xfce4 Xfce4-terminal xfce4-terminal xdman-Main Lxappearance Gparted Thunar \
 Viewnior Xarchiver Pavucontrol firefox:Dialog firefox:Browser \
 firefox:Pop-up nitrogen Gpick)
 for i in ${floatingApps[@]}; do

@@ -130,6 +130,10 @@ super + {_,shift + }q
 super + shift + Return
 	xfce4-terminal
 
+# Screenshot 
+Print
+	flameshot gui
+
 
 # # # # # # # # # # # # # # # # # # # Desktop  utilities # # # # # # # # # # # # # # # # # # # #
 
