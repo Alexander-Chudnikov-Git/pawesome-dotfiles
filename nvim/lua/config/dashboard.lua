@@ -65,7 +65,7 @@ function dashboard_redraw()
         config = conf,
         preview = {
             command = "cat | bash ~/.config/nvim/scripts/ansi-print.sh",
-            file_path = "~/.config/nvim/data/art/fox_1.ansi",
+            file_path = "~/.config/nvim/data/art/fox_2.ansi",
             file_height = 12,
             file_width = 44,
         },

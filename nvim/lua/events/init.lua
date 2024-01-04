@@ -39,25 +39,53 @@ function create_window_handler()
     vim.fn.timer_start(200, function()
         simulate_ctrl_f()
         simulate_ctrl_b()
+
+        -- Get the current tabpage
+        local current_tabpage = vim.fn.tabpagenr()
+
+        -- Get the list of windows in the current tabpage
+        local windows = vim.fn.gettabinfo(current_tabpage)[1].windows
+
+        -- Iterate over the windows and print their IDs
+        for _, winid in ipairs(windows) do
+            print( "Window ID: " .. winid )
+            vim.api.nvim_win_set_option(winid, 'scrolloff', 999)
+            vim.api.nvim_win_set_option(winid, 'sidescrolloff', 999)
+        end
     end)
 end
 
 -- Handle widnow resize events
 function resize_window_handler()
-    dashboard_redraw()
     simulate_ctrl_f()
     simulate_ctrl_b()
+
+    -- Get the current tabpage
+    local current_tabpage = vim.fn.tabpagenr()
+
+    -- Get the list of windows in the current tabpage
+    local windows = vim.fn.gettabinfo(current_tabpage)[1].windows
+
+    -- Iterate over the windows and print their IDs
+    for _, winid in ipairs(windows) do
+        print( "Window ID: " .. winid )
+        
+        if winid ~= 1000 then
+            vim.api.nvim_win_close(win_id, true)
+        end
+    end
 end
 
 -- Attach the resize_window_handler function to VimResized autocmd event
-vim.api.nvim_exec([[
-    augroup ResizeWindow
-        autocmd!
-        autocmd VimResized * lua resize_window_handler()
-    augroup END
-]], false)
+vim.api.nvim_create_autocmd('VimResized', {
+    callback = function()
+        resize_window_handler()
+    end
+})
 
 -- Attach the create_window_handler() function to Vim start event
-vim.api.nvim_exec([[
-    autocmd VimEnter * lua create_window_handler()
-]], false)
+vim.api.nvim_create_autocmd('VimEnter', {
+    callback = function()
+        create_window_handler()
+    end
+})

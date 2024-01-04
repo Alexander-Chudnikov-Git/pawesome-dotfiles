@@ -155,8 +155,10 @@ super + {_,shift + }{1-9,0}
 ### Move/Resize window
 
 # Move a floating window
-super + alt + {Left,Down,Up,Right}
-	bspc node -v {-20 0,0 20,0 -20,20 0}
+super + alt + {Left,Right}
+	home/sunn/scripts/bspwm_resize {-p,-n} -x -s 20
+super + alt + {Down,Up}
+	home/sunn/scripts/bspwm_resize {-p,-n} -n -s 20
 
 # alternate between the tiled and monocle layout
 super + m

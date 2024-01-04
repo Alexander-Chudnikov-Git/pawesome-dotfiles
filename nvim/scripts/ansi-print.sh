@@ -20,6 +20,7 @@ print_ascii() {
     done <<< "${ascii_data//\$\{??\}}"
 
     ((text_padding=ascii_len))
+    ((ascii_len=ascii_len + 8))
 
     while IFS= read -r line; do
         printf '%*b%b\n' $text_padding "\e[2K\e[${ascii_len}D" "$line"
