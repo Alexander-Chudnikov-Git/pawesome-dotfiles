@@ -1,3 +1,5 @@
+#! /bin/sh
+
 # ╔════════════════════════════════════════════════════════════════════════════════════════════╗
 # ║                                                                                            ║
 # ║   .S_sSSs     .S_SSSs     .S     S.     sSSs    sSSs    sSSs_sSSs     .S_SsS_S.     sSSs   ║
@@ -17,4 +19,6 @@
 # ║                                                                                            ║
 # ╚════════════════════════════════════════════════════════════════════════════════════════════╝
 
-# THIS FILE IS NOT USED, CHECK sxgkd FOR KEYBINDS
+# Perl gem bin folder
+export GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
+export PATH="$PATH:$GEM_HOME/bin"

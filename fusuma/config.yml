@@ -29,9 +29,9 @@ swipe:
       command: "bash ~/.config/rofi/scripts/windowmenu.sh" # Open window menu
   4:
     left:
-      command: "xdotool key super" # 
+      command: "xdotool key super" #
     right:
-      command: "xdotool key super" # 
+      command: "xdotool key super" #
     up:
       command: "xdotool key super" #
     down:

@@ -19,6 +19,9 @@
 # ║                                                                                            ║
 # ╚════════════════════════════════════════════════════════════════════════════════════════════╝
 
+# Copy background for lightdm
+cp ~/.config/background/mountain.png /usr/share/bspwm/background/background.png
+
 # Set display from arandr saved script
 sh ~/.screenlayout/monitor.sh &
 
@@ -28,9 +31,6 @@ sh ~/.screenlayout/monitor.sh &
 # Notifications
 /usr/bin/dunst &
 
-# Update login screen wallpaper
-cp /home/chooisfox/.config/background/endeavouros-wallpaper.png /usr/share/endeavouros/backgrounds/endeavouros-wallpaper.png 
-
 # Wallpaper
 nitrogen --restore &
 
@@ -39,14 +39,14 @@ killall nm-applet; nohup nm-applet &
 nm-applet --indicator &
 
 # Dex
-killall firewall-applet
+killall firewall-applet &
 dex -a -s /etc/xdg/autostart/:~/.config/autostart/ &
 
 # Cursor
 xsetroot -cursor_name left_ptr &
 
 # File manager
-thunar --daemon
+thunar --daemon &
 
 # Low battery notifier
 ~/.config/bspwm/scripts/low_bat_notifier.sh
@@ -58,12 +58,15 @@ thunar --daemon
 flameshot &
 
 # Language change
-
 setxkbmap -layout us,ru
 setxkbmap -option 'grp:win_space_toggle'
 
 # Picom (Compfy for animations support)
+# killall picom  &
+# picom --daemon &
+# killall compfy &
 compfy --daemon &
 
 # Fusuma (touchpad gestures)
-$(ruby -e 'print Gem.user_dir')/bin/fusuma
+killall fusuma &
+$(ruby -e 'puts Gem.user_dir')/bin/fusuma &
