@@ -55,8 +55,9 @@ bspc config borderless_monocle    true
 bspc config gapless_monocle       true
 bspc config pointer_follows_focus true
 bspc config focus_follows_pointer true
+
 bspc config pointer_modifier super
-bspc config pointer_action1 move
+bspc config pointer_action1  move
 
 # Smooth animations
 bspc config pointer_motion_interval 60
