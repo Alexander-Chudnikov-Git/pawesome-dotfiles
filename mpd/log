@@ -1,0 +1,43 @@
+Jan 21 17:54 : exception: Failed to open '/home/chooisfox/.config/mpd/mpd.state': No such file or directory
+Jan 21 17:54 : exception: Unsupported URI scheme
+Jan 21 17:54 : exception: Failed to open '/home/chooisfox/.config/mpd/playlists/[Radio Streams].m3u': No such file or directory
+Jan 21 17:54 : exception: No such playlist
+Jan 21 19:29 : exception: Unsupported URI scheme
+Jan 21 19:29 : exception: Failed to open '/home/chooisfox/.config/mpd/playlists/[Radio Streams].m3u': No such file or directory
+Jan 21 19:29 : exception: No such playlist
+Jan 21 19:30 : exception: Unsupported URI scheme
+Jan 21 19:30 : exception: Failed to open '/home/chooisfox/.config/mpd/playlists/[Radio Streams].m3u': No such file or directory
+Jan 21 19:30 : exception: No such playlist
+Jan 21 19:30 : inotify: music directory was removed - cannot continue to watch it
+Jan 21 19:31 : exception: Failed to open /home/chooisfox/Music: No such file or directory
+Jan 21 19:31 : inotify: music directory was removed - cannot continue to watch it
+Jan 21 19:32 : exception: No such song
+Jan 21 19:36 : player: played "http://127.0.0.1:40115/home/chooisfox/Music/Colour/Anthology/01_Conversations.mp3?album=Anthology&artist=Colour&albumartist=Colour&title=Conversations&genre=Alternative%20rock&disc=1&year=2012&time=201&track=1&id=-1&cantata=song"
+Jan 21 19:36 : exception: Unsupported URI scheme
+Jan 21 19:36 : exception: Failed to open '/home/chooisfox/.config/mpd/playlists/[Radio Streams].m3u': No such file or directory
+Jan 21 19:36 : exception: No such playlist
+Jan 21 19:38 : exception: Unsupported URI scheme
+Jan 21 19:38 : exception: Failed to open '/home/chooisfox/.config/mpd/playlists/[Radio Streams].m3u': No such file or directory
+Jan 21 19:38 : exception: No such playlist
+Jan 21 19:45 : exception: Failed to open '/home/chooisfox/.config/mpd/playlists/[Radio Streams].m3u': No such file or directory
+Jan 21 19:45 : exception: No such playlist
+Jan 21 19:48 : exception: No such song
+Jan 21 19:48 : update: added Colour/Anthology/03_Outerspace.mp3
+Jan 21 19:48 : update: added Colour/Anthology/02_Silverbeast.mp3
+Jan 21 19:48 : update: added Colour/Anthology/05_Some_Miles.mp3
+Jan 21 19:48 : update: added Colour/Anthology/04_Shamu.mp3
+Jan 21 19:48 : update: added Colour/Anthology/06_Over_The_Moon.mp3
+Jan 21 19:48 : update: added Colour/Anthology/07_Chutes.mp3
+Jan 21 19:48 : update: added Colour/Anthology/01_Tired_Eyes.mp3
+Jan 21 19:48 : update: added Colour/Anthology/02_Unicorns.mp3
+Jan 21 19:48 : update: added Colour/Anthology/06_Dinosaurs.mp3
+Jan 21 19:48 : update: added Colour/Anthology/03_Run_Like_You're_Being_Chased.mp3
+Jan 21 19:48 : update: added Colour/Anthology/05_Tallulah's_My_Mothers_Name.mp3
+Jan 21 19:48 : update: added Colour/Anthology/01_Conversations.mp3
+Jan 21 19:48 : update: added Colour/Anthology/04_Jewels_Like_Fairy_Lights.mp3
+Jan 21 19:48 : player: played "http://127.0.0.1:40115/home/chooisfox/Music/Colour/Anthology/01_Conversations.mp3?album=Anthology&artist=Colour&albumartist=Colour&title=Conversations&genre=Alternative%20rock&disc=1&year=2012&time=201&track=1&id=-1&cantata=song"
+Jan 21 19:48 : exception: Unsupported URI scheme
+Jan 21 19:48 : exception: Failed to open '/home/chooisfox/.config/mpd/playlists/[Radio Streams].m3u': No such file or directory
+Jan 21 19:48 : exception: No such playlist
+Jan 21 19:49 : player: played "Colour/Anthology/02_Silverbeast.mp3"
+Jan 21 19:58 : player: played "Colour/Anthology/02_Silverbeast.mp3"

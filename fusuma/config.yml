@@ -20,9 +20,9 @@
 swipe:
   3:
     left:
-      command: "bspc desktop -f prev" # Switch to next workspace
+      command: "bspc desktop -f next" # Switch to next workspace
     right:
-      command: "bspc desktop -f next" # Switch to previous workspace
+      command: "bspc desktop -f prev" # Switch to previous workspace
     up:
       command: "bash ~/.config/rofi/scripts/appsmenu.sh" # Open application menu
     down:
