@@ -22,13 +22,58 @@
 # Load system variables
 ~/.config/bspwm/systemvar
 
-# Functions
-setup_desktop() {
-    local desktop_number=$1; shift
-    local app_name=("$@")
-    for i in ${app_name[@]}; do
-		bspc rule -a '$i' desktop='^$desktop_number' follow=on focus=on; done
+INTERNAL_MONITOR="eDP-1"
+EXTERNAL_MONITOR="HDMI-1"
+
+# on first load setup default workspaces
+if [[ "$1" = 0 ]]; then
+  if [[ $(xrandr -q | grep "${EXTERNAL_MONITOR} connected") ]]; then
+    bspc monitor "$INTERNAL_MONITOR" -d TERM MERG CODE WEBM EDIT MPTY CHAT LATX MUSI
+    bspc monitor "$EXTERNAL_MONITOR" -d MISC
+    bspc wm -O "$EXTERNAL_MONITOR" "$INTERNAL_MONITOR"
+  else 
+    bspc monitor "$INTERNAL_MONITOR" -d TERM MERG CODE WEBM EDIT MPTY CHAT LATX MUSI MISC
+    bspc wm -O "$INTERNAL_MONITOR"
+  fi
+fi
+
+monitor_add() {
+  bspc desktop MISC --to-monitor "$EXTERNAL_MONITOR"
+  
+  # Remove default desktop created by bspwm
+  bspc desktop Desktop --remove
+  
+  bspc monitor -o "$INTERNAL_MONITOR" -d TERM MERG CODE WEBM EDIT MPTY CHAT LATX MUSI
+  bspc monitor -o "$EXTERNAL_MONITOR" -d MISC
+  
+  # reorder monitors
+  bspc wm -O "$INTERNAL_MONITOR" "$EXTERNAL_MONITOR"
 }
+
+
+monitor_remove() {
+  bspc monitor "$EXTERNAL_MONITOR" -a Desktop
+  
+  bspc desktop MISC --to-monitor "$INTERNAL_MONITOR"
+  
+  # Remove default desktop created by bspwm
+  bspc desktop Desktop --remove
+  
+  bspc monitor "$INTERNAL_MONITOR" -o TERM MERG CODE WEBM EDIT MPTY CHAT LATX MUSI MISC
+  
+  # reorder monitors
+  bspc wm -O "$INTERNAL_MONITOR"
+}
+
+if [[ $(xrandr -q | grep "${EXTERNAL_MONITOR} connected") ]]; then
+  # set xrandr rules for docked setup
+  xrandr --output "$INTERNAL_MONITOR" --mode 2240x1400 --pos 0x0 --rotate normal --output "$EXTERNAL_MONITOR" --primary --mode 1280x720 --pos 2240x0 --rotate normal
+  monitor_add
+else
+  # set xrandr rules for mobile setup
+  xrandr --output "$INTERNAL_MONITOR" --primary --mode 2240x1400 --pos 0x0 --rotate normal --output "$EXTERNAL_MONITOR" --off
+  monitor_remove
+fi
 
 # Hotkeys
 pgrep -x sxhkd > /dev/null || sxhkd &
@@ -38,14 +83,14 @@ pgrep -x sxhkd > /dev/null || sxhkd &
 
 # Setup default monitor settings
 #                 1    2    3    4    5    6    7    8    9   10
-bspc monitor -d TERM MERG CODE WEBM EDIT MPTY CHAT LATX MUSI MISC
+# bspc monitor -d TERM MERG CODE WEBM EDIT MPTY CHAT LATX MUSI MISC
 
 # Border settings
 bspc config border_width          0
 bspc config window_gap            12
 
 # Border colors
-bspc config focused_border_color        "#e6ac0c"
+bspc config focused_border_color        "#e8ac0c"
 bspc config normal_border_color         "#e6ac0c"
 bspc config active_border_color         "#e6ac0c"
 
@@ -75,31 +120,38 @@ declare -a music=(cmus)
 declare -a misc=(htop)
 
 # Desktop setup
-setup_desktop 1  "${terminal[@]}"
-setup_desktop 2  "${main_git[@]}"
-setup_desktop 3  "${main_editor[@]}"
-setup_desktop 4  "${browser[@]}"
-setup_desktop 5  "${secondary_editor[@]}"
-setup_desktop 6  "${empty[@]}"
-setup_desktop 7  "${chat[@]}"
-setup_desktop 8  "${latex[@]}"
-setup_desktop 9  "${music[@]}"
-setup_desktop 10 "${misc[@]}"
+# setup_desktop 1  "${terminal[@]}"
+# setup_desktop 2  "${main_git[@]}"
+# setup_desktop 3  "${main_editor[@]}"
+# setup_desktop 4  "${browser[@]}"
+# setup_desktop 5  "${secondary_editor[@]}"
+# setup_desktop 6  "${empty[@]}"
+# setup_desktop 7  "${chat[@]}"
+# setup_desktop 8  "${latex[@]}"
+# setup_desktop 9  "${music[@]}"
+# setup_desktop 10 "${misc[@]}"
 
 # Floating Apps
 declare -a floatingApps=(dolphin Dolphin URxvt Alacritty xterm xfce xfce4 Xfce4-terminal xfce4-terminal xdman-Main Lxappearance Gparted Thunar \
-Viewnior Xarchiver Pavucontrol firefox:Dialog firefox:Browser \
-firefox:Pop-up nitrogen Gpick)
+Viewnior Xarchiver Pavucontrol firefox:Dialog firefox:Browser qt-ukr-categorizer \
+firefox:Pop-up nitrogen Gpick Xgnokii:* Xgnokii:*)
 for i in ${floatingApps[@]}; do
-    bspc rule -a $i state=floating focus=on follow=on\
+    bspc rule -a $i state=floating focus=on follow=on \
     rectangle=800x600+0+0 center=true; done
 
 # Floating media
 declare -a floatingCust=(*:*:Picture-in-picture *:Toolkit:Picture-in-Picture mpv)
 for i in ${floatingCust[@]}; do
     bspc rule -a $i state=floating sticky=on follow=on focus=on \
-    rectangle=500x300+1366+50; done
-
+    rectangle=500x300+1740+50; done
+    
+# Phone stuff    
+bspc rule -a Xgnokii:xgnokii state=floating sticky=on follow=on focus=on \
+    rectangle=280x100+1960+1250 center=false;
+    
+bspc rule -a Xgnokii:xgnokii:Options state=floating focus=on follow=on \
+    rectangle=800x600+0+0 center=true;
+    
 # Start screen
 bspc rule -a cava state=floating focus=on follow=off rectangle=600x200+10+40;
 

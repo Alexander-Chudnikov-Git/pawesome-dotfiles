@@ -22,3 +22,5 @@
 # Perl gem bin folder
 export GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
 export PATH="$PATH:$GEM_HOME/bin"
+export QT_LOGGING_RULES='*.debug=true'
+

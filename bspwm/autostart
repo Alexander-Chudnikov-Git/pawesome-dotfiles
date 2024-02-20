@@ -38,6 +38,10 @@ nitrogen --restore &
 killall nm-applet; nohup nm-applet &
 nm-applet --indicator &
 
+# Bluetooth
+killall blueman-applet Pf
+blueman-applet & 
+
 # Dex
 killall firewall-applet &
 dex -a -s /etc/xdg/autostart/:~/.config/autostart/ &
