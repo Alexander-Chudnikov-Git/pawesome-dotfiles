@@ -26,49 +26,49 @@ super + space
 
 # Cut {MacOS style}
 super + x
-  xte "keyup x" "keyup Super_L" "keydown Control_L" "key x" "keyup Control_L" "keydown Super_L"
+  xte "keyup x" "keyup Super_L" "keydown Control_L" "str x" "keyup Control_L" "keydown Super_L"
 
 # Copy {MacOS style}
 super + c
-  ~/.config/sxhkd/script/if_matches_window.sh --not --class "kitty" -- xte "keyup c" "keyup Super_L" "keydown Control_L"                   "key c"                 "keyup Control_L" "keydown Super_L" ; \
-  ~/.config/sxhkd/script/if_matches_window.sh       --class "kitty" -- xte "keyup c" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key c" "keyup Shift_L" "keyup Control_L" "keydown Super_L"
+  ~/.config/sxhkd/script/if_matches_window.sh --not --class "kitty" -- xte "keyup c" "keyup Super_L" "keydown Control_L"                   "str c"                 "keyup Control_L" "keydown Super_L"; \
+  ~/.config/sxhkd/script/if_matches_window.sh       --class "kitty" -- xte "keyup c" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "str c" "keyup Shift_L" "keyup Control_L" "keydown Super_L"
 
 # Insert {MacOS style}
 super + v
-  ~/.config/sxhkd/script/if_matches_window.sh --not --class "kitty" -- xte "keyup v" "keyup Super_L" "keydown Control_L"                   "key v"                 "keyup Control_L" "keydown Super_L" ; \
-  ~/.config/sxhkd/script/if_matches_window.sh       --class "kitty" -- xte "keyup v" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "key v" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
+  ~/.config/sxhkd/script/if_matches_window.sh --not --class "kitty" -- xte "keyup v" "keyup Super_L" "keydown Control_L"                   "str v"                 "keyup Control_L" "keydown Super_L"; \
+  ~/.config/sxhkd/script/if_matches_window.sh       --class "kitty" -- xte "keyup v" "keyup Super_L" "keydown Control_L" "keydown Shift_L" "str v" "keyup Shift_L" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
 
 # Save {MacOS style}
 super + s
-  xte "keyup s" "keyup Super_L" "keydown Super_L" "keyup Super_L" "keydown Control_L" "key s" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
+  xte "keyup s" "keyup Super_L" "keydown Super_L" "keyup Super_L" "keydown Control_L" "str s" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
 
 # Super save {MacOS style}
 super + shift + s
-  xte "keyup s" "keyup Super_L" "keydown Control_L" "key s" "keyup Control_L" "keydown Super_L"
+  xte "keyup s" "keyup Super_L" "keydown Control_L" "str s" "keyup Control_L" "keydown Super_L"
 
 # Redo {MacOS style}
 super + y
-  xte "keyup y" "keyup Super_L" "keydown Super_L" "keyup Super_L" "keydown Control_L" "key y" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
+  xte "keyup y" "keyup Super_L" "keydown Super_L" "keyup Super_L" "keydown Control_L" "str y" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
 
 # Redo alt {MacOS style}
 super + shift + z
-  xte "keyup z" "keyup Super_L" "keydown Control_L" "key z" "keyup Control_L" "keydown Super_L"
+  xte "keyup z" "keyup Super_L" "keydown Control_L" "str z" "keyup Control_L" "keydown Super_L"
 
 # Undo {MacOS style}
 super + z
-  xte "keyup z" "keyup Super_L" "keydown Super_L" "keyup Super_L" "keydown Control_L" "key z" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
+  xte "keyup z" "keyup Super_L" "keydown Super_L" "keyup Super_L" "keydown Control_L" "str z" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
 
 # Find {MacOS style}
 super + f
-  xte "keyup f" "keyup Super_L" "keydown Super_L" "keyup Super_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
+  xte "keyup f" "keyup Super_L" "keydown Super_L" "keyup Super_L" "keydown Control_L" "str f" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
 
 # Super find {MacOS style}
 super + shift + f
-  xte "keyup f" "keyup Super_L" "keydown Control_L" "key f" "keyup Control_L" "keydown Super_L"
+  xte "keyup f" "keyup Super_L" "keydown Control_L" "str f" "keyup Control_L" "keydown Super_L"
 
 # Select all text
 super + a
-  xte "keyup a" "keyup Super_L" "keydown Super_L" "keyup Super_L" "keydown Control_L" "key a" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
+  xte "keyup a" "keyup Super_L" "keydown Super_L" "keyup Super_L" "keydown Control_L" "str a" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
 
 # # # # # # # # # # # # # # # # # # # # # ROIF  keybinds # # # # # # # # # # # # # # # # # # # #
 
@@ -96,7 +96,7 @@ control + alt + space
 control + super + d
 	bash ~/.config/rofi/scripts/sshmenu.sh
 
-# Power Menu 
+# Power Menu
 super + shift + e
   bash ~/.config/rofi/powermenu.sh
 
@@ -114,7 +114,7 @@ super + alt + p
 # Restart bspwm
 super + alt + r
 	bspc wm -r
-	
+
 # Quit bspwm
 super + alt + q
 	bspc quit
@@ -130,7 +130,7 @@ super + {_,shift + }q
 super + shift + Return
 	kitty
 
-# Screenshot 
+# Screenshot
 Print
 	flameshot gui
 
@@ -249,24 +249,24 @@ super + alt + ctrl + {Left,Down,Up,Right}
 # Special hotkeys
 #
 
-# Brightness 
+# Brightness
 XF86MonBrightness{Up,Down}
 	brightnessctl s {+5%,5%-}
 
 # Multimedia keys
 XF86Audio{Raise,Lower}Volume
-	pamixer {-i,-d} 5 
+	pamixer {-i,-d} 5
 	# amixer -D pipewire sset Master 5%{+,-}
 
 # still
 XF86AudioMute
 	pamixer -t
 	# amixer -D pulse sset Master toggle-mute
-  
+
 # amixer -q set Master toggle
 # Simple amixer command seems to have problems unmuting device
 
- 
+
 
 
 
@@ -278,14 +278,14 @@ super + Print
   ~/.config/bspwm/scripts/screenshot.sh
 
 # Shortcuts
-super + w 
+super + w
   firefox
 
-super + n 
-  thunar  
+super + n
+  thunar
 
 super + t
-  kitty 
+  kitty
 
 super + F1
   ~/.config/bspwm/scripts/keybindings_rofi.sh

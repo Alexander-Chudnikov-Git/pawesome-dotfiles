@@ -138,12 +138,6 @@ firefox:Pop-up nitrogen Gpick Xgnokii:* Xgnokii:*)
 for i in ${floatingApps[@]}; do
     bspc rule -a $i state=floating focus=on follow=on \
     rectangle=800x600+0+0 center=true; done
-
-# Floating media
-declare -a floatingCust=(*:*:Picture-in-picture *:Toolkit:Picture-in-Picture mpv)
-for i in ${floatingCust[@]}; do
-    bspc rule -a $i state=floating sticky=on follow=on focus=on \
-    rectangle=500x300+1740+50; done
     
 # Phone stuff    
 bspc rule -a Xgnokii:xgnokii state=floating sticky=on follow=on focus=on \
@@ -155,5 +149,11 @@ bspc rule -a Xgnokii:xgnokii:Options state=floating focus=on follow=on \
 # Start screen
 bspc rule -a cava state=floating focus=on follow=off rectangle=600x200+10+40;
 
+# Floating media
+declare -a floatingCust=(*:*:Picture-in-picture *:*:Picture-in-Picture mpv)
+for i in ${floatingCust[@]}; do
+    bspc rule -a $i state=floating sticky=on follow=on focus=on \
+    rectangle=500x300+1740+50; done
+    
 # Load autostart script
 ~/.config/bspwm/autostart

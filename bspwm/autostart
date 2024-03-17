@@ -40,7 +40,7 @@ nm-applet --indicator &
 
 # Bluetooth
 killall blueman-applet Pf
-blueman-applet & 
+blueman-applet &
 
 # Dex
 killall firewall-applet &
@@ -62,8 +62,8 @@ thunar --daemon &
 flameshot &
 
 # Language change
-setxkbmap -layout us,ru
-setxkbmap -option 'grp:win_space_toggle'
+setxkbmap -model pc104 -layout us,ru -variant ,qwerty -option grp:win_space_toggle
+# setxkbmap us
 
 # Picom (Compfy for animations support)
 # killall picom  &
@@ -74,3 +74,7 @@ compfy --daemon &
 # Fusuma (touchpad gestures)
 killall fusuma &
 $(ruby -e 'puts Gem.user_dir')/bin/fusuma &
+
+# Clip menu
+killall clipmenud &
+clipmenud &
