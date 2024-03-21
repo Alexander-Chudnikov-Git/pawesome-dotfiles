@@ -1,4 +1,4 @@
- # ╔════════════════════════════════════════════════════════════════════════════════════════════╗
+# ╔════════════════════════════════════════════════════════════════════════════════════════════╗
 # ║                                                                                            ║
 # ║   .S_sSSs     .S_SSSs     .S     S.     sSSs    sSSs    sSSs_sSSs     .S_SsS_S.     sSSs   ║
 # ║  .SS~YS%%b   .SS~SSSSS   .SS     SS.   d%%SP   d%%SP   d%%SP~YS%%b   .SS~S*S~SS.   d%%SP   ║
@@ -22,11 +22,14 @@
 
 # Change keyboard layout {MacOS style}
 super + space
-  {setxkbmap us, setxkbmap ru}
+  xkb-switch
 
 # Cut {MacOS style}
 super + x
   xte "keyup x" "keyup Super_L" "keydown Control_L" "str x" "keyup Control_L" "keydown Super_L"
+
+super + Cyrillic_che
+  xte "keyup Super_L" "keydown Control_L" "str x" "keyup Control_L" "keydown Super_L"
 
 # Copy {MacOS style}
 super + c
@@ -47,8 +50,8 @@ super + shift + s
   xte "keyup s" "keyup Super_L" "keydown Control_L" "str s" "keyup Control_L" "keydown Super_L"
 
 # Redo {MacOS style}
-super + y
-  xte "keyup y" "keyup Super_L" "keydown Super_L" "keyup Super_L" "keydown Control_L" "str y" "keyup Control_L" "keydown Super_L" "keyup Super_L" "keydown Super_L"
+#super + y
+#  xte "keyup y" "keyup Super_L" "keydown Control_L" "str y" "keyup Control_L" "keydown Super_L"
 
 # Redo alt {MacOS style}
 super + shift + z
@@ -197,8 +200,8 @@ super + {p,b,comma,period}
 	bspc node -f @{parent,brother,first,second}
 
 # focus the next/previous window in the current desktop
-super + {_,shift + }c
-	bspc node -f {next,prev}.local.!hidden.window
+super + alt + {Left,Right}
+	bspc node -f {prev,next}.local.!hidden.window
 
 
 # focus the last node/desktop

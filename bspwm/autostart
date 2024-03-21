@@ -62,7 +62,7 @@ thunar --daemon &
 flameshot &
 
 # Language change
-setxkbmap -model pc104 -layout us,ru -variant ,qwerty -option grp:win_space_toggle
+setxkbmap -model pc104 -layout us,ru -variant qwerty, -option grp:win_space_toggle #-symbols "us+ru"
 # setxkbmap us
 
 # Picom (Compfy for animations support)
