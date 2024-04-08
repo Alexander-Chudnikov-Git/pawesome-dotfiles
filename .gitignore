@@ -1,6 +1,5 @@
 # Specify filepatterns you want git to ignore.
 
-bspwm/scripts/
 cantata/
 clangd/
 dconf/
