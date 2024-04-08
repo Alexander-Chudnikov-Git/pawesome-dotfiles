@@ -29,6 +29,7 @@ sh ~/.screenlayout/monitor.sh &
 ~/.config/polybar/scripts/launch.sh &
 
 # Notifications
+killall dunst &
 /usr/bin/dunst &
 
 # Wallpaper
@@ -39,7 +40,7 @@ killall nm-applet; nohup nm-applet &
 nm-applet --indicator &
 
 # Bluetooth
-killall blueman-applet Pf
+killall blueman-applet &
 blueman-applet &
 
 # Dex
@@ -53,10 +54,8 @@ xsetroot -cursor_name left_ptr &
 thunar --daemon &
 
 # Low battery notifier
-~/.config/bspwm/scripts/low_bat_notifier.sh
+~/.config/bspwm/scripts/notify_low_battery.sh
 
-# Memory fix
-~/.config/bspwm/scripts/thundar_memory_fix.sh
 
 # Screenshot
 flameshot &

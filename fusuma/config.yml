@@ -45,5 +45,5 @@ hold:
   4:
     command: "xdotool key super" #
 interval:
-  pinch: 0.1
+  pinch: 0.01
   swipe: 0.4

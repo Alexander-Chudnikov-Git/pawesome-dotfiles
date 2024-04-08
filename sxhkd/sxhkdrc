@@ -101,7 +101,12 @@ control + super + d
 
 # Power Menu
 super + shift + e
-  bash ~/.config/rofi/powermenu.sh
+  bash ~/.config/rofi/scripts/powermenu.sh
+
+# Pacman Menu
+super + shift + p
+  bash ~/.config/rofi/scripts/pacmanmenu.sh
+
 
 
 # # # # # # # # # # # # # # # # # # # Reload  applications # # # # # # # # # # # # # # # # # # #
@@ -179,7 +184,7 @@ super + g
 # state/flags
 #
 
-# set the window state
+# dset the window state
 super + alt + {t,shift + t,s,f}
 	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
 

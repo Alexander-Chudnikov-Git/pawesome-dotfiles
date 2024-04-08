@@ -28,7 +28,7 @@
 # center_y=$((screen_height / 2) - 250)
 
 options="Power Off\0icon\x1f<span color='#DB1100'>⏻</span>\nSleep Mode\0icon\x1f<span color='#0088DB'>󰿒</span>\nReboot\0icon\x1f<span color='#00A86B'></span>\nShow Hints\0icon\x1f<span color='#DB9900'></span>"
-                                                                                                 # On some systems rofi positioning is not working 
+                                                                                                 # On some systems rofi positioning is not working
 selected_option=$(echo -en "$options" | rofi -dmenu -theme ~/.config/rofi/themes/powermenu.rasi) # -xoffset $center_x -yoffset $center_y
 
 case $selected_option in

@@ -25,52 +25,35 @@
 INTERNAL_MONITOR="eDP-1"
 EXTERNAL_MONITOR="HDMI-1"
 
-# on first load setup default workspaces
-if [[ "$1" = 0 ]]; then
-  if [[ $(xrandr -q | grep "${EXTERNAL_MONITOR} connected") ]]; then
-    bspc monitor "$INTERNAL_MONITOR" -d TERM MERG CODE WEBM EDIT MPTY CHAT LATX MUSI
-    bspc monitor "$EXTERNAL_MONITOR" -d MISC
-    bspc wm -O "$EXTERNAL_MONITOR" "$INTERNAL_MONITOR"
-  else 
-    bspc monitor "$INTERNAL_MONITOR" -d TERM MERG CODE WEBM EDIT MPTY CHAT LATX MUSI MISC
-    bspc wm -O "$INTERNAL_MONITOR"
-  fi
-fi
-
 monitor_add() {
-  bspc desktop MISC --to-monitor "$EXTERNAL_MONITOR"
-  
+  bspc monitor "$INTERNAL_MONITOR" -d TERM MERG CODE WEBM EDIT MPTY CHAT LATX MUSI
+  bspc monitor "$EXTERNAL_MONITOR" -d MISC
+
   # Remove default desktop created by bspwm
   bspc desktop Desktop --remove
-  
-  bspc monitor -o "$INTERNAL_MONITOR" -d TERM MERG CODE WEBM EDIT MPTY CHAT LATX MUSI
-  bspc monitor -o "$EXTERNAL_MONITOR" -d MISC
-  
-  # reorder monitors
+
+  # Move miscellaneous desktop to external monitor
+  bspc desktop MISC --to-monitor "$EXTERNAL_MONITOR"
+
+  # Reorder monitors
   bspc wm -O "$INTERNAL_MONITOR" "$EXTERNAL_MONITOR"
 }
 
-
 monitor_remove() {
-  bspc monitor "$EXTERNAL_MONITOR" -a Desktop
-  
+  bspc monitor "$INTERNAL_MONITOR" -d TERM MERG CODE WEBM EDIT MPTY CHAT LATX MUSI MISC
   bspc desktop MISC --to-monitor "$INTERNAL_MONITOR"
-  
-  # Remove default desktop created by bspwm
   bspc desktop Desktop --remove
-  
-  bspc monitor "$INTERNAL_MONITOR" -o TERM MERG CODE WEBM EDIT MPTY CHAT LATX MUSI MISC
-  
-  # reorder monitors
+
+  # Reorder monitors
   bspc wm -O "$INTERNAL_MONITOR"
 }
 
-if [[ $(xrandr -q | grep "${EXTERNAL_MONITOR} connected") ]]; then
-  # set xrandr rules for docked setup
+if xrandr | grep -q "${EXTERNAL_MONITOR} connected"; then
+  # Set xrandr rules for docked setup
   xrandr --output "$INTERNAL_MONITOR" --mode 2240x1400 --pos 0x0 --rotate normal --output "$EXTERNAL_MONITOR" --primary --mode 1280x720 --pos 2240x0 --rotate normal
   monitor_add
 else
-  # set xrandr rules for mobile setup
+  # Set xrandr rules for mobile setup
   xrandr --output "$INTERNAL_MONITOR" --primary --mode 2240x1400 --pos 0x0 --rotate normal --output "$EXTERNAL_MONITOR" --off
   monitor_remove
 fi
@@ -133,19 +116,19 @@ declare -a misc=(htop)
 
 # Floating Apps
 declare -a floatingApps=(dolphin Dolphin URxvt Alacritty xterm xfce xfce4 Xfce4-terminal xfce4-terminal xdman-Main Lxappearance Gparted Thunar \
-Viewnior Xarchiver Pavucontrol firefox:Dialog firefox:Browser qt-ukr-categorizer \
+Viewnior Xarchiver Pavucontrol firefox:Dialog firefox:Browser qt-ukr-categorizer zenity \
 firefox:Pop-up nitrogen Gpick Xgnokii:* Xgnokii:*)
 for i in ${floatingApps[@]}; do
     bspc rule -a $i state=floating focus=on follow=on \
     rectangle=800x600+0+0 center=true; done
-    
-# Phone stuff    
+
+# Phone stuff
 bspc rule -a Xgnokii:xgnokii state=floating sticky=on follow=on focus=on \
     rectangle=280x100+1960+1250 center=false;
-    
+
 bspc rule -a Xgnokii:xgnokii:Options state=floating focus=on follow=on \
     rectangle=800x600+0+0 center=true;
-    
+
 # Start screen
 bspc rule -a cava state=floating focus=on follow=off rectangle=600x200+10+40;
 
@@ -154,6 +137,6 @@ declare -a floatingCust=(*:*:Picture-in-picture *:*:Picture-in-Picture mpv)
 for i in ${floatingCust[@]}; do
     bspc rule -a $i state=floating sticky=on follow=on focus=on \
     rectangle=500x300+1740+50; done
-    
+
 # Load autostart script
 ~/.config/bspwm/autostart
