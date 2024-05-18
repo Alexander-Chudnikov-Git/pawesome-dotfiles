@@ -19,8 +19,14 @@
 # ║                                                                                            ║
 # ╚════════════════════════════════════════════════════════════════════════════════════════════╝
 
-# Perl gem bin folder
-export GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
-export PATH="$PATH:$GEM_HOME/bin"
-export QT_LOGGING_RULES='*.debug=true'
+# export QT_LOGGING_RULES='*.debug=false'
+export TERMINAL="/usr/bin/kitty"
+export TERM="xterm-kitty"
 
+# Wine defines
+export WINEPREFIX="/home/chooisfox/.wine"
+export WINEARCH="win64"
+
+# Qt stuff
+export QT_QPA_PLATFORMTHEME="gtk2"
+# export MESA_LOADER_DRIVER_OVERRIDE="crocus"

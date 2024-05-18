@@ -19,32 +19,49 @@
 # ║                                                                                            ║
 # ╚════════════════════════════════════════════════════════════════════════════════════════════╝
 
-# Copy background for lightdm
-cp ~/.config/background/mountain.png /usr/share/bspwm/background/background.png
 
-# Set display from arandr saved script
-sh ~/.screenlayout/monitor.sh &
+# Hotkeys
+# pgrep -x sxhkd > /dev/null || sxhkd &
+pgrep -x sxhkd > /dev/null
+killall sxhkdr
+sxhkd &
+
+# Picom (Compfy for animations support)
+# killall picom  &
+# picom --daemon &
+killall compfy
+killall picom
+compfy --daemon &
 
 # Polybar
 ~/.config/polybar/scripts/launch.sh &
 
-# Notifications
-killall dunst &
-/usr/bin/dunst &
-
 # Wallpaper
-nitrogen --restore &
+# nitrogen --restore &
+killall lwp
+killall lwpwlp
+/usr/local/bin/lwp &
+
+# Copy background for lightdm
+cp ~/.config/background/mountain.png /usr/share/bspwm/background/background.png
+
+# Set display from arandr saved script
+# sh ~/.screenlayout/monitor.sh &
+
+# Notifications
+killall dunst
+dunst &
 
 # Network Applet
-killall nm-applet; nohup nm-applet &
+killall nm-applet; nohup nm-applet
 nm-applet --indicator &
 
 # Bluetooth
-killall blueman-applet &
+killall blueman-applet
 blueman-applet &
 
 # Dex
-killall firewall-applet &
+killall firewall-applet
 dex -a -s /etc/xdg/autostart/:~/.config/autostart/ &
 
 # Cursor
@@ -54,26 +71,21 @@ xsetroot -cursor_name left_ptr &
 thunar --daemon &
 
 # Low battery notifier
-~/.config/bspwm/scripts/notify_low_battery.sh
-
+bash ~/.config/bspwm/scripts/notify_low_battery.sh
 
 # Screenshot
+killall flameshot
 flameshot &
 
 # Language change
 setxkbmap -model pc104 -layout us,ru -variant qwerty, -option grp:win_space_toggle #-symbols "us+ru"
 # setxkbmap us
 
-# Picom (Compfy for animations support)
-# killall picom  &
-# picom --daemon &
-# killall compfy &
-compfy --daemon &
-
 # Fusuma (touchpad gestures)
-killall fusuma &
-$(ruby -e 'puts Gem.user_dir')/bin/fusuma &
+#killall libinput-gestures
+#libinput-gestures &
 
 # Clip menu
-killall clipmenud &
+killall clipmenud
 clipmenud &
+

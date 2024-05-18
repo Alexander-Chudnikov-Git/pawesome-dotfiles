@@ -1,3 +1,4 @@
+
 # ╔════════════════════════════════════════════════════════════════════════════════════════════╗
 # ║                                                                                            ║
 # ║   .S_sSSs     .S_SSSs     .S     S.     sSSs    sSSs    sSSs_sSSs     .S_SsS_S.     sSSs   ║
@@ -88,7 +89,7 @@ shift + alt + space
 	bash ~/.config/rofi/scripts/windowmenu.sh
 
 # DRun (list of open windows) {Arch style}
-shift + super + d
+super + shift + d
 	bash ~/.config/rofi/scripts/windowmenu.sh
 
 # DRun (list of ssh sesssions) {MacOS style}
@@ -96,7 +97,7 @@ control + alt + space
 	bash ~/.config/rofi/scripts/sshmenu.sh
 
 # DRun (list of ssh sesssions) {Arch style}
-control + super + d
+super + control + d
 	bash ~/.config/rofi/scripts/sshmenu.sh
 
 # Power Menu
@@ -107,21 +108,27 @@ super + shift + e
 super + shift + p
   bash ~/.config/rofi/scripts/pacmanmenu.sh
 
+# Exit to dm
+super + m
+	bspc quit
 
 
 # # # # # # # # # # # # # # # # # # # Reload  applications # # # # # # # # # # # # # # # # # # #
 
 # Reload sxhkd configuration files:
 super + Escape
-	pkill -USR1 -x sxhkd
+	pkill -USR1 -x sxhkd && \
+	notify-send 'SXHKD reloaded'
 
-# Restart bspwm
+# Restart polybar
 super + alt + p
-	bash ~/.config/polybar/scripts/launch.sh
+	bash ~/.config/polybar/scripts/launch.sh && \
+	notify-send 'Polybar reloaded'
 
 # Restart bspwm
 super + alt + r
-	bspc wm -r
+	bspc wm -r && \
+	notify-send 'BSPWM reloaded'
 
 # Quit bspwm
 super + alt + q
@@ -131,16 +138,63 @@ super + alt + q
 super + {_,shift + }q
 	bspc node -{c,k}
 
+# Reload UDEV
+super + alt + u
+	sudo udevadm control --reload-rules && \
+	sudo udevadm trigger && \
+	notify-send 'UDEV reloaded'
+
 
 # # # # # # # # # # # # # # # # # # # Start applications # # # # # # # # # # # # # # # # # # # #
 
 # Terminal
-super + shift + Return
+super + {shift + Return,t}
 	kitty
+
+super + w
+  firefox
+
+super + n
+  thunar
 
 # Screenshot
 Print
 	flameshot gui
+
+# Screen record
+super + Print
+	simplescreenrecorder
+
+
+# # # # # # # # # # # # # # # # # # # Function key mapping # # # # # # # # # # # # # # # # # # #
+
+# Microphone mute
+XF86AudioMicMute
+  pamixer --default-source -t && \
+  [ "$(pamixer --default-source --get-mute)" = false ] && \
+  notify-send 'Microphone unmuted' || \
+  notify-send 'Microphone muted'
+
+# Microphone mute
+XF86AudioMute
+	pamixer -t && \
+  [ "$(pamixer --get-mute)" = false ] && \
+  notify-send 'Sound unmuted' || \
+  notify-send 'Sound muted'
+
+# Brightness
+XF86MonBrightness{Up,Down}
+	brightnessctl s {+5%,5%-}
+
+# Multimedia keys
+XF86Audio{Raise,Lower}Volume
+	pamixer {-i,-d} 5
+
+# Messenger keys
+XF86Messenger
+	pgrep -f "telegram-desktop" > /dev/null && \
+	killall telegram-desktop || \
+	telegram-desktop &
 
 
 # # # # # # # # # # # # # # # # # # # Desktop  utilities # # # # # # # # # # # # # # # # # # # #
@@ -164,9 +218,9 @@ super + {_,shift + }{1-9,0}
 
 # Move a floating window
 super + alt + {Left,Right}
-	home/sunn/scripts/bspwm_resize {-p,-n} -x -s 20
+	bash ~/.config/sxhkd/script/resize_window.sh {-p,-n} -x -s 20
 super + alt + {Down,Up}
-	home/sunn/scripts/bspwm_resize {-p,-n} -n -s 20
+	bash ~/.config/sxhkd/script/resize_window.sh {-p,-n} -n -s 20
 
 # alternate between the tiled and monocle layout
 super + m
@@ -251,49 +305,3 @@ super + alt + shift + {Left,Down,Up,Right}
 # contract a window by moving one of its side inward
 super + alt + ctrl + {Left,Down,Up,Right}
 	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
-
-
-#
-# Special hotkeys
-#
-
-# Brightness
-XF86MonBrightness{Up,Down}
-	brightnessctl s {+5%,5%-}
-
-# Multimedia keys
-XF86Audio{Raise,Lower}Volume
-	pamixer {-i,-d} 5
-	# amixer -D pipewire sset Master 5%{+,-}
-
-# still
-XF86AudioMute
-	pamixer -t
-	# amixer -D pulse sset Master toggle-mute
-
-# amixer -q set Master toggle
-# Simple amixer command seems to have problems unmuting device
-
-
-
-
-
-# Screenshot
-Print
-  scrot "$(xdg-user-dir PICTURES)/screenshot-$(date +%F_%T).png"
-
-super + Print
-  ~/.config/bspwm/scripts/screenshot.sh
-
-# Shortcuts
-super + w
-  firefox
-
-super + n
-  thunar
-
-super + t
-  kitty
-
-super + F1
-  ~/.config/bspwm/scripts/keybindings_rofi.sh
