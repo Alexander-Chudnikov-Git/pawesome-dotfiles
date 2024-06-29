@@ -1,4 +1,3 @@
-
 # ╔════════════════════════════════════════════════════════════════════════════════════════════╗
 # ║                                                                                            ║
 # ║   .S_sSSs     .S_SSSs     .S     S.     sSSs    sSSs    sSSs_sSSs     .S_SsS_S.     sSSs   ║
@@ -102,15 +101,11 @@ super + control + d
 
 # Power Menu
 super + shift + e
-  bash ~/.config/rofi/scripts/powermenu.sh
+	bash ~/.config/rofi/scripts/powermenu.sh
 
 # Pacman Menu
 super + shift + p
-  bash ~/.config/rofi/scripts/pacmanmenu.sh
-
-# Exit to dm
-super + m
-	bspc quit
+	bash ~/.config/rofi/scripts/pacmanmenu.sh
 
 
 # # # # # # # # # # # # # # # # # # # Reload  applications # # # # # # # # # # # # # # # # # # #
@@ -132,7 +127,8 @@ super + alt + r
 
 # Quit bspwm
 super + alt + q
-	bspc quit
+	bspc quit && \
+	pkill bspwm
 
 # Quit selected application
 super + {_,shift + }q
@@ -152,7 +148,10 @@ super + {shift + Return,t}
 	kitty
 
 super + w
-  firefox
+	firefox
+
+super + shift + w
+	librewolf
 
 super + n
   thunar

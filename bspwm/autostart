@@ -20,6 +20,10 @@
 # ╚════════════════════════════════════════════════════════════════════════════════════════════╝
 
 
+# Polkit
+killall polkit-gnome-authentication-agent-1
+/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+
 # Hotkeys
 # pgrep -x sxhkd > /dev/null || sxhkd &
 pgrep -x sxhkd > /dev/null
@@ -27,14 +31,10 @@ killall sxhkdr
 sxhkd &
 
 # Picom (Compfy for animations support)
-# killall picom  &
-# picom --daemon &
-killall compfy
+# killall compfy  &
+# compfy --daemon &
 killall picom
-compfy --daemon &
-
-# Polybar
-~/.config/polybar/scripts/launch.sh &
+picom --daemon --replace &
 
 # Wallpaper
 # nitrogen --restore &
@@ -53,7 +53,7 @@ killall dunst
 dunst &
 
 # Network Applet
-killall nm-applet; nohup nm-applet
+killall nm-applet
 nm-applet --indicator &
 
 # Bluetooth
@@ -88,4 +88,12 @@ setxkbmap -model pc104 -layout us,ru -variant qwerty, -option grp:win_space_togg
 # Clip menu
 killall clipmenud
 clipmenud &
+
+# OTD
+killall otd-daemon
+otd-daemon &
+
+# Gestures
+killall libinput-gestures
+libinput-gestures -c /.config/libinput-gestures/libinput-gestures.conf  &
 

@@ -26,5 +26,6 @@
 # Calculate the center of the screen
 # center_x=$((screen_width / 2) - 300)
 # center_y=$((screen_height / 2) - 250)
+source ~/.config/bspwm/systemvar
                                                                          # On some systems rofi positioning is not working
 rofi -no-lazy-grab -show drun -theme ~/.config/rofi/themes/appsmenu.rasi # -xoffset $center_x -yoffset $center_y

@@ -30,3 +30,8 @@ export WINEARCH="win64"
 # Qt stuff
 export QT_QPA_PLATFORMTHEME="gtk2"
 # export MESA_LOADER_DRIVER_OVERRIDE="crocus"
+
+# Fix java
+export _JAVA_AWT_WM_NONREPARENTING=1
+export GHIDRA_INSTALL_DIR="/opt/ghidra/"
+

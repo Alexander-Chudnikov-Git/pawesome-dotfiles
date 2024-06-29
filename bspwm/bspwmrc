@@ -24,44 +24,8 @@ logger "Starting PAWESOME"
 # Load system variables
 ~/.config/bspwm/systemvar
 
-INTERNAL_MONITOR="eDP-1"
-EXTERNAL_MONITOR="HDMI-1"
-
-monitor_add() {
-  bspc monitor "$INTERNAL_MONITOR" -d TERM MERG CODE WEBM EDIT MPTY CHAT LATX MUSI
-  bspc monitor "$EXTERNAL_MONITOR" -d MISC
-
-  # Remove default desktop created by bspwm
-  bspc desktop Desktop --remove
-
-  # Move miscellaneous desktop to external monitor
-  bspc desktop MISC --to-monitor "$EXTERNAL_MONITOR"
-
-  # Reorder monitors
-  bspc wm -O "$INTERNAL_MONITOR" "$EXTERNAL_MONITOR"
-}
-
-monitor_remove() {
-  bspc monitor "$INTERNAL_MONITOR" -d TERM MERG CODE WEBM EDIT MPTY CHAT LATX MUSI MISC
-  bspc desktop MISC --to-monitor "$INTERNAL_MONITOR"
-  bspc desktop Desktop --remove
-
-  # Reorder monitors
-  bspc wm -O "$INTERNAL_MONITOR"
-}
-
-if xrandr | grep -q "${EXTERNAL_MONITOR} connected"; then
-  # Set xrandr rules for docked setup
-  xrandr --output "$INTERNAL_MONITOR" --primary --mode 2240x1400 --pos 0x0 --rotate normal --output "$EXTERNAL_MONITOR" --mode 1920x1080 --pos 2240x0 --rotate normal
-  monitor_add
-else
-  # Set xrandr rules for mobile setup
-  xrandr --output "$INTERNAL_MONITOR" --primary --mode 2240x1400 --pos 0x0 --rotate normal --output "$EXTERNAL_MONITOR" --off
-  monitor_remove
-fi
-
-# Polkit
-/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+# Setup monitor
+~/.config/bspwm/scripts/monitor_setup.sh
 
 # Setup default monitor settings
 #                 1    2    3    4    5    6    7    8    9   10
@@ -141,6 +105,8 @@ for i in ${floatingCust[@]}; do
     rectangle=500x300+1740+50; done
 
 bspc rule -a polybar private
+
+bspc rule -a 'side_drop_down_menu' state=floating
 
 # Load autostart script
 ~/.config/bspwm/autostart

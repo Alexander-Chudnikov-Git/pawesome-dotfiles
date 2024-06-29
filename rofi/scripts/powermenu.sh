@@ -42,7 +42,7 @@ case $selected_option in
         bspc quit && systemctl suspend
         ;;
     "Reboot")
-        systemctl reboot
+        reboot
         ;;
     "Show Hints")
         # Replace this with the command to show hints or any other action you want.
