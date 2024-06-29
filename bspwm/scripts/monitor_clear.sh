@@ -20,17 +20,17 @@
 # ╚════════════════════════════════════════════════════════════════════════════════════════════╝
 
 # first setup /etc/udev/rules.d/99-monitor-hotplug.rules
-# ACTION=="change",  SUBSYSTEM=="drm", RUN+="/usr/bin/systemctl start hotplug-monitor.service"
+# ACTION=="change",  SUBSYSTEM=="drm", RUN+="/usr/bin/systemctl restart hotplug-monitor.service"
 
 # then setup /etc/systemd/system/hotplug-monitor.service
 # [Unit]
 # Description=Monitor hotplug service
 #
 # [Service]
-# Type=oneshot
+# Type=forked
 # User=<USERNAME>
-# ExecStart=/home/<USERNAME>/.config/bspwm/scripts/monitor_clear.sh # This on is not nessesary
-# ExecStop=/home/<USERNAME>/.config/bspwm/scripts/monitor_setup.sh
+# ExecStart=/home/<USERNAME>/.config/bspwm/scripts/monitor_setup.sh
+# RemainAfterExit=true
 #
 # [Install]
 # WantedBy=multi-user.target

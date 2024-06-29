@@ -96,4 +96,6 @@ for MONITOR in $(bspc query -M --names); do
     fi
 done
 
+sleep 1
+
 /home/${USER_NAME}/.config/polybar/scripts/launch.sh &
