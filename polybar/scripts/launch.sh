@@ -17,10 +17,12 @@ while pgrep -u $USER_ID -x polybar >/dev/null; do sleep 1; done
 
 # Launch polybar on each monitor
 polybar --list-monitors | cut -d":" -f1 | while read -r monitor; do
-  echo "1"
-  MONITOR=$monitor polybar top -c /home/${USER_NAME}/.config/polybar/config.ini &
-  echo "2"
+  if [ "$(xrandr -q | grep -e "\sconnected\s" | grep $monitor | grep -c primary)" == "1" ]; then
+    MONITOR=$monitor polybar top -c /home/${USER_NAME}/.config/polybar/config.ini &
+  else
+    MONITOR=$monitor polybar top-no-tray -c /home/${USER_NAME}/.config/polybar/config.ini &
+  fi
+
   MONITOR=$monitor polybar main -c /home/${USER_NAME}/.config/polybar/config.ini &
-  echo "3"
 done
 
