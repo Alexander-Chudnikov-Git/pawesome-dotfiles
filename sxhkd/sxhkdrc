@@ -147,14 +147,21 @@ super + alt + u
 super + {shift + Return,t}
 	kitty
 
+# Start firefox
 super + w
 	firefox
 
+# Start secure firefox
 super + shift + w
 	librewolf
 
+# Start thunar
 super + n
   thunar
+
+# Start thunar
+super + l
+  lite-xl
 
 # Screenshot
 Print
@@ -191,9 +198,9 @@ XF86Audio{Raise,Lower}Volume
 
 # Messenger keys
 XF86Messenger
-	pgrep -f "telegram-desktop" > /dev/null && \
-	killall telegram-desktop || \
-	telegram-desktop &
+	pgrep -f "64gram-desktop" > /dev/null && \
+	killall 64gram-desktop || \
+	64gram-desktop & # telegram-desktop &
 
 
 # # # # # # # # # # # # # # # # # # # Desktop  utilities # # # # # # # # # # # # # # # # # # # #
@@ -215,11 +222,13 @@ super + {_,shift + }{1-9,0}
 
 ### Move/Resize window
 
-# Move a floating window
-super + alt + {Left,Right}
-	bash ~/.config/sxhkd/script/resize_window.sh {-p,-n} -x -s 20
-super + alt + {Down,Up}
-	bash ~/.config/sxhkd/script/resize_window.sh {-p,-n} -n -s 20
+# Expand a window by moving one of its side outward
+super + alt + shift + {Left,Down,Up,Right}
+	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+
+# contract a window by moving one of its side inward
+super + alt + ctrl + {Left,Down,Up,Right}
+	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
 
 # alternate between the tiled and monocle layout
 super + m
@@ -232,6 +241,16 @@ super + y
 # swap the current node and the biggest window
 super + g
 	bspc node -s biggest.window
+
+# Increase gap
+super + alt + equal
+    bspc config window_gap $(($(bspc config window_gap) + 5))
+
+# Decrease gap
+super + alt + minus
+    bspc config window_gap $(($(bspc config window_gap) - 5))
+
+###################################################################
 
 #
 # state/flags
@@ -272,9 +291,8 @@ super + {o,i}
 	bspc node {older,newer} -f; \
 	bspc wm -h on
 
-
 #
-# preselect
+# Preselect
 #
 
 # preselect the direction
@@ -293,14 +311,3 @@ super + ctrl + space
 super + ctrl + shift + space
 	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
 
-#
-# move/resize
-#
-
-# expand a window by moving one of its side outward
-super + alt + shift + {Left,Down,Up,Right}
-	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
-
-# contract a window by moving one of its side inward
-super + alt + ctrl + {Left,Down,Up,Right}
-	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}

@@ -30,9 +30,13 @@ configuration {
   hide-scrollbar:      true;
   markup-rows:         true;
   search:              false;
+  hover-select:        true;
+  me-select-entry:     "";
+  me-accept-entry:     "MousePrimary";
 }
 
 * {
+  color:            @foreground-light;
   background-color: @background-dark;
   font:             "Rubik Regular 9";
   location:         north west;

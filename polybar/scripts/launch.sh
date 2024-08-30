@@ -16,7 +16,8 @@ killall -q polybar
 while pgrep -u $USER_ID -x polybar >/dev/null; do sleep 1; done
 
 # Launch polybar on each monitor
-polybar --list-monitors | cut -d":" -f1 | while read -r monitor; do
+polybar --list-monitors | cut -d":" -f1 |
+while read -r monitor; do
   if [ "$(xrandr -q | grep -e "\sconnected\s" | grep $monitor | grep -c primary)" == "1" ]; then
     MONITOR=$monitor polybar top -c /home/${USER_NAME}/.config/polybar/config.ini &
   else

@@ -32,7 +32,8 @@ configuration {
 }
 
 * {
-  background-color: @background-dark;
+  color:               @foreground-light;
+  background-color:    @background-dark;
   font: "Rubik Regular 9";
 }
 

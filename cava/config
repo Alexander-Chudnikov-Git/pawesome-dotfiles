@@ -174,7 +174,7 @@ reverse = 0
 ; foreground = default
 
 # SDL and sdl_glsl only support hex code colors, these are the default:
-background = '#111111'
+background = '#0B0A09'
 ; foreground = '#33ffff'
 
 

@@ -79,7 +79,7 @@ declare -a misc=(htop)
 
 # Floating Apps
 declare -a floatingApps=(dolphin Dolphin URxvt Alacritty xterm xfce xfce4 Xfce4-terminal xfce4-terminal xdman-Main Lxappearance Gparted Thunar \
-Viewnior Xarchiver Pavucontrol firefox:Dialog firefox:Browser qt-ukr-categorizer zenity \
+Viewnior Xarchiver Pavucontrol pavucontrol Nm-connection-editor Firewall-config firefox:Dialog firefox:Browser zenity \
 firefox:Pop-up nitrogen Gpick Xgnokii:* Xgnokii:*)
 for i in ${floatingApps[@]}; do
     bspc rule -a $i state=floating focus=on follow=on \
@@ -106,7 +106,11 @@ for i in ${floatingCust[@]}; do
 
 bspc rule -a polybar private
 
-bspc rule -a 'side_drop_down_menu' state=floating
+# Qt stuff
+declare -a qtApps=('side_drop_down_menu' 'qt-docking-windows' 'qt-ukr-categorizer' 'Qt Docking Windows')
+for i in ${qtApps[@]}; do
+    bspc rule -a $i state=floating;
+    done
 
 # Load autostart script
 ~/.config/bspwm/autostart
