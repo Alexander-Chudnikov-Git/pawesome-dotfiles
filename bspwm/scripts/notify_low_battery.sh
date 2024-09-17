@@ -21,72 +21,94 @@
 
 ### VARIABLES
 
-POLL_INTERVAL=60    # seconds at which to check battery level
-MEDUIM_BAT=33          # lesser than this is considered low battery
-LOW_BAT=10          # lesser than this is considered low battery
+POLL_INTERVAL=10    # Polling interval in seconds
+MEDIUM_BAT=33       # Medium battery threshold (less than this is considered low)
+LOW_BAT=10          # Low battery threshold (less than this is considered critical)
 
-# If BAT0 doesn't work for you, check available devices with command below
-#
-#   $ ls -1 /sys/class/power_supply/
-#
+# Battery device path (adjust if necessary)
 BAT_PATH=/sys/class/power_supply/BAT0
 BAT_STAT=$BAT_PATH/status
 
-if [[ -f $BAT_PATH/charge_full ]]
-then
+# Detect battery capacity and current charge method (mAh or mWh)
+if [[ -f $BAT_PATH/charge_full ]]; then
     BAT_FULL=$BAT_PATH/charge_full
     BAT_NOW=$BAT_PATH/charge_now
-elif [[ -f $BAT_PATH/energy_full ]]
-then
+elif [[ -f $BAT_PATH/energy_full ]]; then
     BAT_FULL=$BAT_PATH/energy_full
     BAT_NOW=$BAT_PATH/energy_now
 else
-    exit
+    echo "Battery not detected or unsupported battery interface."
+    exit 1
 fi
 
-### END OF VARIABLES
+# Ensure required tools are available
+if ! command -v notify-send &> /dev/null || ! command -v zenity &> /dev/null; then
+    echo "Required tools (notify-send, zenity) not found."
+    exit 1
+fi
 
-kill_running() {     # stop older instances to not get multiple notifications
-   local mypid=$$
+### FUNCTIONS
 
-   declare pids=($(pgrep -f ${0##*/}))
+# Kill any previous instances of the script to avoid duplicate notifications
+kill_running() {
+    local mypid=$$
+    local script_name=${0##*/}
 
-   echo ${0##*/}
+    # Get the list of running PIDs for this script, excluding the current one
+    local pids=($(pgrep -f $script_name))
 
-   for pid in ${pids[@]/$mypid/}; do
-      kill $pid
-      sleep 1
-   done
+    for pid in "${pids[@]}"; do
+        if [[ $pid -ne $mypid ]]; then
+            kill $pid
+            sleep 1
+        fi
+    done
 }
 
-launched=0
+### MAIN SCRIPT
 
-# Run only if battery is detected
-if ls -1qA /sys/class/power_supply/ | grep -q BAT
-then
-
+# Ensure battery is detected before proceeding
+if ls -1qA /sys/class/power_supply/ | grep -q BAT; then
     kill_running
 
-    while true
-    do
+    medium_notified=false  # Track if medium battery notification has been sent
+    critical_notified=false  # Track if critical battery notification has been sent
+
+    while true; do
         bf=$(cat $BAT_FULL)
         bn=$(cat $BAT_NOW)
         bs=$(cat $BAT_STAT)
 
-        bat_percent=$(( 100 * $bn / $bf ))
-
-        if [[ $bat_percent -lt $MEDUIM_BAT && "$bs" = "Discharging" && $launched -lt 3 ]]
-        then
-            notify-send --urgency=normal "$bat_percent% : Low Battery!"
-            launched=$((launched+1))
-        elif [[ $bat_percent -lt $LOW_BAT && "$bs" = "Discharging" && $launched -lt 3 ]]
-        then
-            notify-send --urgency=critical "$bat_percent% : Low Battery!"
-            launched=$((launched+1))
-        elif [[ "$bs" = "Charging" ]]
-        then
-            launched=0
+        bat_percent=$(( 100 * bn / bf ))  # Calculate battery percentage
+        
+        # Handle critical battery notification
+        if [[ $bat_percent -lt $LOW_BAT && "$bs" = "Discharging" && $critical_notified = false ]]; then
+            notify-send --urgency=critical "$bat_percent% : Critical Battery!"
+            zenity --warning --text="Critical battery: $bat_percent%.\nPlease plug in the charger." \
+                   --title="Battery Warning" --width=500 --height=2500 --timeout=10
+            critical_notified=true  # Mark as notified for critical battery
         fi
-        sleep $POLL_INTERVAL
+
+        # Handle medium battery notification
+        if [[ $bat_percent -lt $MEDIUM_BAT && "$bs" = "Discharging" && $medium_notified = false ]]; then
+            notify-send --urgency=normal "$bat_percent% : Low Battery!"
+            medium_notified=true  # Mark as notified for medium battery
+        fi
+
+        # Reset notifications if charging
+        if [[ "$bs" = "Charging" ]]; then
+            if [[ $bat_percent -gt $LOW_BAT ]]; then
+                critical_notified=false  # Reset if battery charges above LOW_BAT
+            fi
+            if [[ $bat_percent -gt $MEDIUM_BAT ]]; then
+                medium_notified=false  # Reset if battery charges above MEDIUM_BAT
+            fi
+        fi
+
+        sleep $POLL_INTERVAL  # Wait for the next poll
     done
+else
+    echo "No battery detected."
+    exit 1
 fi
+

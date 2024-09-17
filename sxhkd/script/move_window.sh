@@ -17,7 +17,6 @@ err() {
         exit 1
 }
 
-
 usage() {
         echo "usage: bspwm_resize [direction]"
         echo

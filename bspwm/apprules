@@ -19,68 +19,48 @@
 # ║                                                                                            ║
 # ╚════════════════════════════════════════════════════════════════════════════════════════════╝
 
-# Function to kill and restart processes
-restart_process() {
-    local process=$1
-    local command=${2:-$1}  # If no second argument, use the first as the command
-    killall "$process" &>/dev/null
-    "$command" &
+# Unified rule setup function
+apply_bspc_rules() {
+    local state=$1
+    local focus=$2
+    local follow=$3
+    local rectangle=$4
+    local center=$5
+
+    shift 5
+    for app in "$@"; do
+        bspc rule -a "$app" state="$state" focus="$focus" follow="$follow" rectangle="$rectangle" center="$center"
+    done
 }
 
-# Polkit
-restart_process "polkit-gnome-authentication-agent-1" "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+# Floating Apps
+apply_bspc_rules floating on on 1000x600+0+0 true \
+    dolphin Dolphin URxvt Alacritty xterm xfce xfce4 Xfce4-terminal xfce4-terminal xdman-Main Lxappearance Gparted Thunar \
+    Viewnior Xarchiver Pavucontrol pavucontrol Nm-connection-editor Firewall-config firefox:Dialog firefox:Browser zenity \
+    firefox:Pop-up nitrogen Gpick Xgnokii:* Xgnokii:*
 
-# Hotkeys
-pgrep -x sxhkd > /dev/null || restart_process "sxhkd"
+# Phone stuff
+apply_bspc_rules floating on on 280x100+1960+1250 \
+    Xgnokii:xgnokii Xgnokii:xgnokii:Options
 
-# Compositor
-restart_process "picom" "picom --daemon --replace"
+# Start screen
+apply_bspc_rules floating on off 600x200+10+40 \
+    cava
 
 # Wallpaper
-killall lwp
-restart_process "lwpwlp" "/usr/local/bin/lwp"
+bspc rule -a lwpwlp layer=below
 
-# Notifications
-restart_process "dunst"
+# Floating media
+apply_bspc_rules floating on on 500x300+1740+50 \
+    *:*:Picture-in-picture *:*:Picture-in-Picture mpv
 
-# Network Applet
-restart_process "nm-applet" "nm-applet --indicator"
+# Private polybar rule
+bspc rule -a polybar private
 
-# Bluetooth
-killall firewall-applet
-restart_process "blueman-applet"
+# Qt stuff
+apply_bspc_rules floating off off 0x0 \
+    side_drop_down_menu qt-docking-windows qt-ukr-categorizer Qt Docking Windows
 
-# File manager daemon
-restart_process "thunar" "thunar --daemon"
-
-# Screenshot tool
-restart_process "flameshot"
-
-# Clipmenu
-restart_process "clipmenud"
-
-# OTD (on-the-desk daemon)
-restart_process "otd-daemon"
-
-# Gestures
-restart_process "libinput-gestures" "libinput-gestures -c ~/.config/libinput-gestures/libinput-gestures.conf"
-
-# Theme manager
-restart_process "xsettingsd"
-
-# OTHER STUFF
-
-# Low battery notifier
-bash ~/.config/bspwm/scripts/notify_low_battery.sh &
-
-# Copy background for lightdm
-# cp ~/.config/background/mountain.png /usr/share/bspwm/background/background.png
-
-# Set default cursor
-xsetroot -cursor_name left_ptr &
-
-# Keyboard layout (US/RU)
-setxkbmap -model pc104 -layout us,ru -variant qwerty -option grp:win_space_toggle
-
-# Dex (Autostart services)
-dex -a -s /etc/xdg/autostart/:~/.config/autostart/ &
+# Warnings
+apply_bspc_rules floating on on 500x250+0+0 true \
+    zenity

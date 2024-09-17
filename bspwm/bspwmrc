@@ -19,26 +19,23 @@
 # ║                                                                                            ║
 # ╚════════════════════════════════════════════════════════════════════════════════════════════╝
 
+
 logger "Starting PAWESOME"
 
 # Load system variables
 ~/.config/bspwm/systemvar
 
 # Setup monitor
-~/.config/bspwm/scripts/monitor_setup.sh
-
-# Setup default monitor settings
-#                 1    2    3    4    5    6    7    8    9   10
-# bspc monitor -d TERM MERG CODE WEBM EDIT MPTY CHAT LATX MUSI MISC
+~/.config/bspwm/scripts/monitor_setup.sh --extend
 
 # Border settings
 bspc config border_width          0
 bspc config window_gap            2
 
 # Border colors
-bspc config focused_border_color        "#e8ac0c"
-bspc config normal_border_color         "#e6ac0c"
-bspc config active_border_color         "#e6ac0c"
+bspc config focused_border_color "#e8ac0c"
+bspc config normal_border_color  "#e6ac0c"
+bspc config active_border_color  "#e6ac0c"
 
 # Window positioning
 bspc config split_ratio           0.52
@@ -46,71 +43,32 @@ bspc config borderless_monocle    true
 bspc config gapless_monocle       true
 bspc config pointer_follows_focus true
 bspc config focus_follows_pointer true
-
-bspc config pointer_modifier super
-bspc config pointer_action1  move
+bspc config pointer_modifier      super
+bspc config pointer_action1       move
 
 # Smooth animations
 bspc config pointer_motion_interval 16
 
-# Desktops apps
-declare -a terminal=(kitty)
-declare -a main_git=(Sublime\ Merge Sublime_merge sublime_merge smerge)
-declare -a main_editor=(Sublime\ Text Sublime_text sublime_text subl nvim vim)
-declare -a browser=(firefox)
-declare -a secondary_editor=(qtcreator)
-declare -a empty=()
-declare -a chat=(telegram-desktop)
-declare -a latex=(libreoffice-writer libreoffice-calc libreoffice-impress libreoffice-startcenter libreoffice Soffice *:libreofficedev *:soffice)
-declare -a music=(cmus)
-declare -a misc=(htop)
+# Setup desktops
+declare -A desktops=(
+    [1]="firefox librewolf"
+    [2]="lite-xl qtcreator vim nvim"
+    [3]="terminal kitty"
+    [4]="gitfiend"
+    [5]=""
+    [6]=""
+    [7]="telegram-desktop 64gram-desktop"
+    [8]="evince libreoffice-writer libreoffice-calc libreoffice-impress libreoffice-startcenter libreoffice Soffice *:libreofficedev *:soffice"
+    [9]="cmus"
+    [10]="htop"
+)
 
-# Desktop setup
-# setup_desktop 1  "${terminal[@]}"
-# setup_desktop 2  "${main_git[@]}"
-# setup_desktop 3  "${main_editor[@]}"
-# setup_desktop 4  "${browser[@]}"
-# setup_desktop 5  "${secondary_editor[@]}"
-# setup_desktop 6  "${empty[@]}"
-# setup_desktop 7  "${chat[@]}"
-# setup_desktop 8  "${latex[@]}"
-# setup_desktop 9  "${music[@]}"
-# setup_desktop 10 "${misc[@]}"
+# for i in "${!desktops[@]}"; do
+#     setup_desktop "$i" "${desktops[$i]}"
+# done
 
-# Floating Apps
-declare -a floatingApps=(dolphin Dolphin URxvt Alacritty xterm xfce xfce4 Xfce4-terminal xfce4-terminal xdman-Main Lxappearance Gparted Thunar \
-Viewnior Xarchiver Pavucontrol pavucontrol Nm-connection-editor Firewall-config firefox:Dialog firefox:Browser zenity \
-firefox:Pop-up nitrogen Gpick Xgnokii:* Xgnokii:*)
-for i in ${floatingApps[@]}; do
-    bspc rule -a $i state=floating focus=on follow=on \
-    rectangle=1000x600+0+0 center=true; done
-
-# Phone stuff
-bspc rule -a Xgnokii:xgnokii state=floating sticky=on follow=on focus=on \
-    rectangle=280x100+1960+1250 center=false;
-
-bspc rule -a Xgnokii:xgnokii:Options state=floating focus=on follow=on \
-    rectangle=800x600+0+0 center=true;
-
-# Start screen
-bspc rule -a cava state=floating focus=on follow=off rectangle=600x200+10+40;
-
-# Wallpaper
-bspc rule -a lwpwlp layer=below
-
-# Floating media
-declare -a floatingCust=(*:*:Picture-in-picture *:*:Picture-in-Picture mpv)
-for i in ${floatingCust[@]}; do
-    bspc rule -a $i state=floating sticky=on follow=on focus=on \
-    rectangle=500x300+1740+50; done
-
-bspc rule -a polybar private
-
-# Qt stuff
-declare -a qtApps=('side_drop_down_menu' 'qt-docking-windows' 'qt-ukr-categorizer' 'Qt Docking Windows')
-for i in ${qtApps[@]}; do
-    bspc rule -a $i state=floating;
-    done
+# Load application rules
+~/.config/bspwm/apprules
 
 # Load autostart script
 ~/.config/bspwm/autostart
