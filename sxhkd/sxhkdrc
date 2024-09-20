@@ -95,6 +95,10 @@ super + shift + d
 control + alt + space
 	bash ~/.config/rofi/scripts/sshmenu.sh
 
+# DRun (list of ssh sesssions) {MacOS style}
+super + alt + c
+	bash ~/.config/rofi/scripts/calculator.sh
+
 # DRun (list of ssh sesssions) {Arch style}
 super + control + d
 	bash ~/.config/rofi/scripts/sshmenu.sh

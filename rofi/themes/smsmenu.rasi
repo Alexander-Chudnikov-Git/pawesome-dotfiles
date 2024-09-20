@@ -19,17 +19,101 @@
 # ╚════════════════════════════════════════════════════════════════════════════════════════════╝
 */
 
+@import "~/.config/rofi/themes/shared/colorschemes/current-theme.rasi"
+@import "~/.config/rofi/themes/shared/fonts/current-fonts.rasi"        /* Yeah, I'm not really using it, but why not? */
+
+configuration {
+  show-icons:          true;
+  icon-theme:          "Papirus";
+  drun-display-format: "{name}";
+  disable-history:     false;
+  sidebar-mode:        false;
+  scroll-method:       1;
+  eh:                  2;
+  tokenize:            false;
+}
+
 * {
-    background-dark:      #0B0A09BB;
-    background-semilight: #161412BB;
-    background-light:     #2D2925BB;
-    foreground-dark:      #A3998FEE;
-    foreground-semilight: #ACA39A;
-    foreground-light:     #B6ADA5;
-    accent-yellow:        #DB9900;
-    accent-red:           #DB1100;
-    accent-blue:          #0088DB;
-    accent-green:         #00A86B;
-    background-hover:     #433D37BB;
-    foreground-hover:     #918578BB;
+  color:               @foreground-light;
+  background-color:    @background-dark;
+  font: "0xProto Nerd Font Propo 12";
+}
+
+window {
+  transparency: "real";
+  width:        600px;
+  height:       500px;
+  location:     center;
+}
+
+prompt {
+  enabled:          true;
+  padding:          0.5% 0.5% 0.5% 0%;
+  background-color: @background-light;
+  text-color:       @foreground-light;
+}
+
+mainbox {
+  background-color: @background-dark;
+  children:         [ inputbar, listview ];
+}
+
+inputbar {
+  padding:          0px 0px 0px 0px;
+  background-color: transparent;
+  children:         [entry];
+  padding:          20px 0px 10px 0px;
+}
+
+entry {
+  background-color:  @background-light;
+  padding:           10px;
+  margin:            0px 20px;
+  horizontal-align:  0;
+  color:             @foreground-light;
+  border-radius:     5px;
+  placeholder:       "Search";
+  placeholder-color: @foreground-dark;
+}
+
+listview {
+  columns:          1;
+  spacing:          5px;
+  fixed-columns:    true;
+  background-color: transparent;
+  padding:          0px 20px 0px 20px;
+  cycle:            false;
+  dynamic:          true;
+  layout:           vertical;
+}
+
+element {
+  orientation: horizontal;
+  background-color: transparent;
+  padding: 0px 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+element selected {
+  background-color: @background-hover;
+}
+
+element-icon {
+  background-color: transparent;
+  size: 24;
+  horizontal-align: 0;
+  cursor: inherit;
+}
+
+element-text {
+  horizontal-align: 0;
+  color: @foreground-dark;
+  background-color: transparent;
+  padding: 10px 5px;
+  cursor: inherit;
+}
+
+element-text selected {
+  color: @accent-yellow;
 }

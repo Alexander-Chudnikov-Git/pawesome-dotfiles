@@ -1,4 +1,5 @@
-/*
+#! /bin/sh
+
 # ╔════════════════════════════════════════════════════════════════════════════════════════════╗
 # ║                                                                                            ║
 # ║   .S_sSSs     .S_SSSs     .S     S.     sSSs    sSSs    sSSs_sSSs     .S_SsS_S.     sSSs   ║
@@ -17,19 +18,5 @@
 # ║  Y    ARCH THEME    Y     MADE BY CHOOI    admin@redline-software.moscow     Y             ║
 # ║                                                                                            ║
 # ╚════════════════════════════════════════════════════════════════════════════════════════════╝
-*/
 
-* {
-    background-dark:      #0B0A09BB;
-    background-semilight: #161412BB;
-    background-light:     #2D2925BB;
-    foreground-dark:      #A3998FEE;
-    foreground-semilight: #ACA39A;
-    foreground-light:     #B6ADA5;
-    accent-yellow:        #DB9900;
-    accent-red:           #DB1100;
-    accent-blue:          #0088DB;
-    accent-green:         #00A86B;
-    background-hover:     #433D37BB;
-    foreground-hover:     #918578BB;
-}
+rofi -show calc -modi calc -no-show-match -no-sort -no-persist-history -theme ~/.config/rofi/themes/smsmenu.rasi
