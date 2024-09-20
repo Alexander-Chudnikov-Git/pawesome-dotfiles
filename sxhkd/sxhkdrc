@@ -140,6 +140,9 @@ super + alt + u
 	sudo udevadm trigger && \
 	notify-send 'UDEV reloaded'
 
+# Switch monitor mode [extended|mirrorred]
+super + alt + m
+	bash ~/.config/polybar/scripts/switch_window_mode.sh
 
 # # # # # # # # # # # # # # # # # # # Start applications # # # # # # # # # # # # # # # # # # # #
 

@@ -23,7 +23,7 @@
 restart_process() {
     local process=$1
     local command=${2:-$1}  # If no second argument, use the first as the command
-    killall "$process" &>/dev/null
+    killall -q "$process"
     "$command" &
 }
 
@@ -35,10 +35,6 @@ pgrep -x sxhkd > /dev/null || restart_process "sxhkd"
 
 # Compositor
 restart_process "picom" "picom --daemon --replace"
-
-# Wallpaper
-killall lwp
-restart_process "lwpwlp" "/usr/local/bin/lwp"
 
 # Notifications
 restart_process "dunst"
@@ -77,7 +73,7 @@ bash ~/.config/bspwm/scripts/notify_low_battery.sh &
 # cp ~/.config/background/mountain.png /usr/share/bspwm/background/background.png
 
 # Set default cursor
-xsetroot -cursor_name left_ptr &
+xsetroot -cursor_name left_ptr
 
 # Keyboard layout (US/RU)
 setxkbmap -model pc104 -layout us,ru -variant qwerty -option grp:win_space_toggle
