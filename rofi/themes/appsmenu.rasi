@@ -34,7 +34,7 @@ configuration {
 * {
   color:               @foreground-light;
   background-color:    @background-dark;
-  font: "0xProto Nerd Font Mono 10";
+  font: "3270 Font Propo 10";
 }
 
 window {

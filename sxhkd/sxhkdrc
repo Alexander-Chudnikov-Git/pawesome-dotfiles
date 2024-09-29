@@ -212,6 +212,9 @@ shift + XF86Messenger
 XF86Display
 	bash ~/.config/polybar/scripts/switch_window_mode.sh
 
+XF86Favorites
+	xprop | grep -a -v '[^[:print:]]' | yad --text-info --width=800 --height=600 --title="xprop Output"
+
 # # # # # # # # # # # # # # # # # # # Desktop  utilities # # # # # # # # # # # # # # # # # # # #
 
 ### Change desktop

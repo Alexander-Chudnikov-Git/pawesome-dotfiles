@@ -26,6 +26,9 @@ restart_process() {
     killall -q "$process"
     "$command" &
 }
+m
+# Compositor
+restart_process "picom" "picom --daemon --replace"
 
 # Notifications
 restart_process "dunst" "dunst --startup_notification"
@@ -35,9 +38,6 @@ restart_process "polkit-gnome-authentication-agent-1" "/usr/lib/polkit-gnome/pol
 
 # Hotkeys
 pgrep -x sxhkd > /dev/null || restart_process "sxhkd"
-
-# Compositor
-restart_process "picom" "picom --daemon --replace"
 
 # Network Applet
 restart_process "nm-applet" "nm-applet --indicator"
