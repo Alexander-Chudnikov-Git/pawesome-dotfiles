@@ -99,7 +99,7 @@ set_monitor_resolution_with_offset() {
     MONITOR_NAME=$1
     MAX_RESOLUTION=$(get_max_resolution "$MONITOR_NAME")
     OFFSET=$2
-    xrandr --output "$MONITOR_NAME" --mode "$MAX_RESOLUTION" --pos ${OFFSET}x0 --scale 1x1
+    xrandr --output "$MONITOR_NAME" --mode "$MAX_RESOLUTION" --pos ${OFFSET}x0 --scale 1x1 --set "TearFree" on
 }
 
 set_monitor_mirror() {
@@ -108,7 +108,7 @@ set_monitor_mirror() {
     MAIN_RESOLUTION=$3
     MONITOR_RESOLUTION=$(get_max_resolution "$MONITOR_NAME")
     SCALE=$(calculate_scale "$MONITOR_RESOLUTION" "$MAIN_RESOLUTION")
-    xrandr --output "$MONITOR_NAME" --mode "$MONITOR_RESOLUTION" --scale "$SCALE" --same-as "$MAIN_MONITOR_NAME"
+    xrandr --output "$MONITOR_NAME" --mode "$MONITOR_RESOLUTION" --scale "$SCALE" --same-as "$MAIN_MONITOR_NAME" --set "TearFree" on
 }
 
 remove_unconnected_monitors() {

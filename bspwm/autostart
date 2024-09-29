@@ -27,6 +27,9 @@ restart_process() {
     "$command" &
 }
 
+# Notifications
+restart_process "dunst" "dunst --startup_notification"
+
 # Polkit
 restart_process "polkit-gnome-authentication-agent-1" "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 
@@ -36,9 +39,6 @@ pgrep -x sxhkd > /dev/null || restart_process "sxhkd"
 # Compositor
 restart_process "picom" "picom --daemon --replace"
 
-# Notifications
-restart_process "dunst"
-
 # Network Applet
 restart_process "nm-applet" "nm-applet --indicator"
 
@@ -47,6 +47,7 @@ killall firewall-applet
 restart_process "blueman-applet"
 
 # File manager daemon
+restart_process "udiskie" "udiskie"
 restart_process "thunar" "thunar --daemon"
 
 # Screenshot tool
@@ -62,7 +63,9 @@ restart_process "otd-daemon"
 restart_process "libinput-gestures" "libinput-gestures -c ~/.config/libinput-gestures/libinput-gestures.conf"
 
 # Theme manager
-restart_process "xsettingsd"
+restart_process "xsettingsd" "xsettingsd -c /home/chooisfox/.config/bspwm/xsettingsd"
+
+# restart_process "snixembed" "snixembed --fork"
 
 # OTHER STUFF
 
@@ -79,4 +82,6 @@ xsetroot -cursor_name left_ptr
 setxkbmap -model pc104 -layout us,ru -variant qwerty -option grp:win_space_toggle
 
 # Dex (Autostart services)
+
 dex -a -s /etc/xdg/autostart/:~/.config/autostart/ &
+

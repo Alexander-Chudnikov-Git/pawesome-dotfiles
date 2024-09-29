@@ -38,7 +38,7 @@ configuration {
 * {
   color:            @foreground-light;
   background-color: @background-dark;
-  font:             "Rubik Regular 9";
+  font:             "0xProto Nerd Font Mono 10";
   location:         north west;
   y-offset:         39;
   x-offset:         2;

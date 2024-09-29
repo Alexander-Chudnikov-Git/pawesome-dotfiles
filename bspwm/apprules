@@ -63,4 +63,4 @@ apply_bspc_rules floating off off 0x0 \
 
 # Warnings
 apply_bspc_rules floating on on 500x250+0+0 true \
-    zenity Thunar:Confirm\ to\ replace\ files
+    zenity Yad Thunar:Confirm\ to\ replace\ files

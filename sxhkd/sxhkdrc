@@ -144,10 +144,6 @@ super + alt + u
 	sudo udevadm trigger && \
 	notify-send 'UDEV reloaded'
 
-# Switch monitor mode [extended|mirrorred]
-super + alt + m
-	bash ~/.config/polybar/scripts/switch_window_mode.sh
-
 # # # # # # # # # # # # # # # # # # # Start applications # # # # # # # # # # # # # # # # # # # #
 
 # Terminal
@@ -209,6 +205,12 @@ XF86Messenger
 	killall 64gram-desktop || \
 	64gram-desktop & # telegram-desktop &
 
+shift + XF86Messenger
+	bash ~/.config/rofi/scripts/smsmenu.sh
+
+# Switch monitor mode [extended|mirrorred]
+XF86Display
+	bash ~/.config/polybar/scripts/switch_window_mode.sh
 
 # # # # # # # # # # # # # # # # # # # Desktop  utilities # # # # # # # # # # # # # # # # # # # #
 
@@ -225,7 +227,6 @@ super + shift + {Left,Right}
 # Go to or send to the given desktop
 super + {_,shift + }{1-9,0}
 	bspc {desktop -f,node -d} '^{1-9,10}'
-
 
 ### Move/Resize window
 

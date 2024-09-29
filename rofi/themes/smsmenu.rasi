@@ -31,12 +31,13 @@ configuration {
   scroll-method:       1;
   eh:                  2;
   tokenize:            false;
+  sort:                true;
 }
 
 * {
   color:               @foreground-light;
   background-color:    @background-dark;
-  font: "0xProto Nerd Font Propo 12";
+  font: "0xProto Nerd Font Mono 10";
 }
 
 window {

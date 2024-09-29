@@ -17,7 +17,7 @@
 # ║                                                                                            ║
 # ╚════════════════════════════════════════════════════════════════════════════════════════════╝
 
-Net/ThemeName "Arc-Dark"
-Net/IconThemeName "Arc-Circle"
+Net/ThemeName "WhiteSur-Dark"
+Net/IconThemeName "Papirus-Dark"
 Gtk/CursorThemeName "Pear"
 
