@@ -99,7 +99,7 @@ set_monitor_resolution_with_offset() {
     MONITOR_NAME=$1
     MAX_RESOLUTION=$(get_max_resolution "$MONITOR_NAME")
     OFFSET=$2
-    xrandr --output "$MONITOR_NAME" --mode "$MAX_RESOLUTION" --pos ${OFFSET}x0 --scale 1x1 --set "TearFree" on
+    xrandr --output "$MONITOR_NAME" --mode "$MAX_RESOLUTION" --pos ${OFFSET}x0 --scale 1x1
 }
 
 set_monitor_mirror() {
@@ -108,7 +108,7 @@ set_monitor_mirror() {
     MAIN_RESOLUTION=$3
     MONITOR_RESOLUTION=$(get_max_resolution "$MONITOR_NAME")
     SCALE=$(calculate_scale "$MONITOR_RESOLUTION" "$MAIN_RESOLUTION")
-    xrandr --output "$MONITOR_NAME" --mode "$MONITOR_RESOLUTION" --scale "$SCALE" --same-as "$MAIN_MONITOR_NAME" --set "TearFree" on
+    xrandr --output "$MONITOR_NAME" --mode "$MONITOR_RESOLUTION" --scale "$SCALE" --same-as "$MAIN_MONITOR_NAME"
 }
 
 remove_unconnected_monitors() {
@@ -155,7 +155,7 @@ main() {
         MAIN_MONITOR_NAME=$(xrandr | grep -o "^.*primary" | awk '{print $1}')
         MAIN_RESOLUTION=$(get_max_resolution "$MAIN_MONITOR_NAME")
 
-        xrandr --output "$MAIN_MONITOR_NAME" --mode "$MAIN_RESOLUTION" --pos 0x0 --scale 0.9999x0.9999 # Stupid xorg bug
+        xrandr --output "$MAIN_MONITOR_NAME" --mode "$MAIN_RESOLUTION" --pos 0x0 --scale 1x1 # Stupid xorg bug
 
         for MONITOR in $CONNECTED_MONITORS; do
             if [ "$MONITOR" != "$MAIN_MONITOR_NAME" ]; then
@@ -186,7 +186,7 @@ main() {
 
     remove_unconnected_monitors "$CONNECTED_MONITORS"
 
-    sleep 1
+    
 
     restart_process "lwp" "/home/${USER_NAME}/.config/polybar/scripts/launch.sh"
     restart_process "lwpwlp" "/usr/local/bin/lwpwlp"

@@ -170,8 +170,11 @@ super + l
 Print
 	flameshot gui
 
+shift + Print
+	bash ~/.config/sxhkd/script/screenshot_window.sh
+
 # Screen record
-super + Print
+super + shift + Print
 	simplescreenrecorder
 
 
@@ -200,13 +203,13 @@ XF86Audio{Raise,Lower}Volume
 	pamixer {-i,-d} 5
 
 # Messenger keys
-XF86Messenger
+XF86NotificationCenter
 	pgrep -f "64gram-desktop" > /dev/null && \
 	killall 64gram-desktop || \
 	64gram-desktop & # telegram-desktop &
 
-shift + XF86Messenger
-	bash ~/.config/rofi/scripts/smsmenu.sh
+#shift + XF86Messenger
+	#bash ~/.config/rofi/scripts/smsmenu.sh
 
 # Switch monitor mode [extended|mirrorred]
 XF86Display
@@ -235,11 +238,11 @@ super + {_,shift + }{1-9,0}
 
 # Expand a window by moving one of its side outward
 super + alt + shift + {Left,Down,Up,Right}
-	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+	bspc node -z {left -20 0,top 0 20,top 0 -20,left 20 0}
 
 # contract a window by moving one of its side inward
 super + alt + ctrl + {Left,Down,Up,Right}
-	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+	bspc node -z {right -20 0,bottom 0 20,bottom 0 -20,right 20 0}
 
 # alternate between the tiled and monocle layout
 super + m

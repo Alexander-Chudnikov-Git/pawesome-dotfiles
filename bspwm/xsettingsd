@@ -19,5 +19,10 @@
 
 Net/ThemeName "WhiteSur-Dark"
 Net/IconThemeName "Papirus-Dark"
+
 Gtk/CursorThemeName "Pear"
+Gtk/FontName "Iosevka Nerd Font Medium 12 12"
+
+
+Xft/FontName "Iosevka Nerd Font Medium 12 12"
 

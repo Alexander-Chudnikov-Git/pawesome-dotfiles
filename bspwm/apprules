@@ -52,8 +52,13 @@ apply_bspc_rules floating on off 600x200+10+40 below \
 bspc rule -a lwpwlp layer=below
 
 # Floating media
-apply_bspc_rules floating on on 500x300+1740+50 above \
+apply_bspc_rules floating on 500x300+1740+50 above sticky\
     *:*:Picture-in-picture *:*:Picture-in-Picture mpv
+
+bspc rule -a mpv state=floating sticky=on
+bspc rule -a *:*:Picture-in-picture state=floating sticky=on
+bspc rule -a *:*:Picture-in-Picture state=floating sticky=on
+
 
 # Private polybar rule
 bspc rule -a polybar private

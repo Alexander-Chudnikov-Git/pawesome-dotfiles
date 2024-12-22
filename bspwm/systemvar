@@ -29,8 +29,8 @@ export WINEARCH="win64"
 
 # Qt stuff
 export QT_QPA_PLATFORMTHEME="qt6ct"
-export QT_WAYLAND_DECORATION=whitesur-gtk
-# export QT_STYLE_OVERRIDE=kvantum
+#export QT_WAYLAND_DECORATION=whitesur-gtk
+#export QT_STYLE_OVERRIDE=kvantum
 # export MESA_LOADER_DRIVER_OVERRIDE="crocus"
 
 # Fix java

@@ -26,7 +26,7 @@ restart_process() {
     killall -q "$process"
     "$command" &
 }
-m
+
 # Compositor
 restart_process "picom" "picom --daemon --replace"
 
@@ -53,11 +53,14 @@ restart_process "thunar" "thunar --daemon"
 # Screenshot tool
 restart_process "flameshot"
 
-# Clipmenu
-restart_process "clipmenud"
-
 # OTD (on-the-desk daemon)
 restart_process "otd-daemon"
+
+# Modem and SMS
+restart_process "modem-manager-gui" "modem-manager-gui" && xdotool search --onlyvisible --class modem-manager-gui windowquit
+
+# Clipboard
+anamnesis --start
 
 # Gestures
 restart_process "libinput-gestures" "libinput-gestures -c ~/.config/libinput-gestures/libinput-gestures.conf"
@@ -82,6 +85,5 @@ xsetroot -cursor_name left_ptr
 setxkbmap -model pc104 -layout us,ru -variant qwerty -option grp:win_space_toggle
 
 # Dex (Autostart services)
-
 dex -a -s /etc/xdg/autostart/:~/.config/autostart/ &
 
