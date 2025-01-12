@@ -12,10 +12,10 @@ add_kernel_parameter() {
   local parameter="$1"
   local bootloader
 
-  if command_exists systemctl && systemctl | grep -q "\.mount.*\/boot"; then
-    bootloader="systemd-boot"
-  elif command_exists grub-mkconfig; then
+  if command_exists grub-mkconfig; then
     bootloader="grub"
+  elif command_exists systemctl && systemctl | grep -q "\.mount.*\/boot"; then
+    bootloader="systemd-boot"
   else
     echo "Error: Could not determine bootloader (GRUB or systemd-boot)."
     exit 1
