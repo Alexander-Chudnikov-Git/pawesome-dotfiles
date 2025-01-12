@@ -180,6 +180,10 @@ super + shift + Print
 
 # # # # # # # # # # # # # # # # # # # Function key mapping # # # # # # # # # # # # # # # # # # #
 
+# Xorg supports only keycodes up to 255, so you might need to redefine them
+# in /usr/lib/udev/hwdb.d/60-keyboard.hwdb and then update db by executing these
+# commands sudo systemd-hwdb update and sudo udevadm trigger
+
 # Microphone mute
 XF86AudioMicMute
   pamixer --default-source -t && \
@@ -203,7 +207,7 @@ XF86Audio{Raise,Lower}Volume
 	pamixer {-i,-d} 5
 
 # Messenger keys
-XF86NotificationCenter
+XF86Messenger
 	pgrep -f "64gram-desktop" > /dev/null && \
 	killall 64gram-desktop || \
 	64gram-desktop & # telegram-desktop &

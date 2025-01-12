@@ -19,75 +19,8 @@
 # ║                                                                                            ║
 # ╚════════════════════════════════════════════════════════════════════════════════════════════╝
 
-# Function to kill and restart processes
-restart_process() {
-    local process=$1
-    local command=${2:-$1}  # If no second argument, use the first as the command
-    killall -q "$process"
-    "$command" &
-}
+pkill -f 'bspc subscribe'
 
-# Compositor
-restart_process "picom" "picom --daemon --replace"
-
-# Notifications
-restart_process "dunst" "dunst --startup_notification"
-
-# Polkit
-restart_process "polkit-gnome-authentication-agent-1" "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
-
-# Hotkeys
-pgrep -x sxhkd > /dev/null || restart_process "sxhkd"
-
-# Firewall
-restart_process "firewall-applet"
-
-# Network Applet
-restart_process "nm-applet" "nm-applet --indicator"
-
-# Bluetooth
-restart_process "blueman-applet"
-
-# File manager daemon
-restart_process "udiskie" "udiskie"
-restart_process "thunar" "thunar --daemon"
-
-# Screenshot tool
-restart_process "flameshot"
-
-# OTD (on-the-desk daemon)
-restart_process "otd-daemon"
-
-# Modem and SMS
-restart_process "modem-manager-gui" "modem-manager-gui" && xdotool search --onlyvisible --class modem-manager-gui windowquit
-
-# Clipboard
-# restart_process "clipmon" Not a process
-
-# Gestures
-restart_process "libinput-gestures" "libinput-gestures -c ~/.config/libinput-gestures/libinput-gestures.conf"
-
-# Theme manager
-# restart_process "xsettingsd" "xsettingsd -c /home/chooisfox/.config/bspwm/xsettingsd"
-
-# restart_process "snixembed" "snixembed --fork"
-
-# OTHER STUFF
-
-# Low battery notifier
-bash ~/.config/bspwm/scripts/notify_low_battery.sh &
-
-# Copy background for lightdm
-# cp ~/.config/background/mountain.png /usr/share/bspwm/background/background.png
-
-# Set default cursor
-xsetroot -cursor_name left_ptr
-
-# Keyboard layout (US/RU)
-setxkbmap -model pc104 -layout us,ru -variant qwerty -option grp:win_space_toggle
-
-# Dex (Autostart services)
-dex -a -s /etc/xdg/autostart/:~/.config/autostart/ &
-
-# Restart opened widnows
-#~/.config/bspwm/scripts/bspwm_session.sh -r
+#bspc subscribe node_add node_remove | while read -r line; do
+#    ~/.config/bspwm/scripts/bspwm_session.sh -s
+#done

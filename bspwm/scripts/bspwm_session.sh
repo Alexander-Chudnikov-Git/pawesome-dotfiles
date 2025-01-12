@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/bash
 
 # ╔════════════════════════════════════════════════════════════════════════════════════════════╗
 # ║                                                                                            ║
@@ -19,75 +19,86 @@
 # ║                                                                                            ║
 # ╚════════════════════════════════════════════════════════════════════════════════════════════╝
 
-# Function to kill and restart processes
-restart_process() {
-    local process=$1
-    local command=${2:-$1}  # If no second argument, use the first as the command
-    killall -q "$process"
-    "$command" &
+session_dir="$HOME/.config/bspwm/presistent_values/session"
+session_file="$session_dir/${USER}_session"
+
+save_session() {
+  mkdir -p "$session_dir"
+  > "$session_file"
+
+  wmctrl -l -G | while read -r id desktop x y w h machine_name title; do
+    if [[ "$desktop" == "-1" ]]; then
+      continue
+    fi
+
+    class=$(xprop -id "$id" WM_CLASS | awk -F '"' '{print $2}')
+
+    if ! pgrep -x "$class"; then
+      class=$(xprop -id "$id" WM_CLASS | awk -F '"' '{print $4}')
+    fi
+
+    if ! pgrep -x "$class"; then
+      class=$(xprop -id "$id" WM_CLASS | awk -F '"' '{print $2}')
+    fi
+
+    name=$(xprop -id "$id" WM_NAME | awk -F '"' '{print $2}')
+
+    if [[ -n "$class" ]]; then
+        echo "restore-by-class:$class:$x:$y:$w:$h" >> "$session_file"
+    elif [[ -n "$name" ]]; then
+        echo "restore-by-name:$name:$x:$y:$w:$h" >> "$session_file"
+    fi
+  done
 }
 
-# Compositor
-restart_process "picom" "picom --daemon --replace"
+restore_session() {
+  if [ -f "$session_file" ]; then
+    while read -r line; do
+      IFS=':' read -r type value x y w h <<< "$line"
 
-# Notifications
-restart_process "dunst" "dunst --startup_notification"
+      if [[ "$type" == "restore-by-class" ]]; then
+        if ! pgrep -x "$value"; then
+          "$value" &
+          sleep 0.5
+        fi
 
-# Polkit
-restart_process "polkit-gnome-authentication-agent-1" "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+        win_id=$(wmctrl -l -G | awk -v c="$value" '$7 ~ c {print $1; exit}')
 
-# Hotkeys
-pgrep -x sxhkd > /dev/null || restart_process "sxhkd"
+        if [[ -n "$win_id" ]]; then
+          wmctrl -i -r "$win_id" -e "0,$x,$y,$w,$h"
+        fi
+      elif [[ "$type" == "restore-by-name" ]]; then
+        "$name" &
+        sleep 0.5
 
-# Firewall
-restart_process "firewall-applet"
+        win_id=$(wmctrl -l -G | awk -v n="$name" '$0 ~ n {print $1; exit}')
 
-# Network Applet
-restart_process "nm-applet" "nm-applet --indicator"
+        if [[ -n "$win_id" ]]; then
+          wmctrl -i -r "$win_id" -e "0,$x,$y,$w,$h"
+        fi
+      fi
+    done < "$session_file"
+    rm "$session_file"
+  fi
+}
 
-# Bluetooth
-restart_process "blueman-applet"
+while getopts "rs" opt; do
+  case $opt in
+    r)
+      restore_session
+      ;;
+    s)
+      save_session
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+  esac
+done
 
-# File manager daemon
-restart_process "udiskie" "udiskie"
-restart_process "thunar" "thunar --daemon"
-
-# Screenshot tool
-restart_process "flameshot"
-
-# OTD (on-the-desk daemon)
-restart_process "otd-daemon"
-
-# Modem and SMS
-restart_process "modem-manager-gui" "modem-manager-gui" && xdotool search --onlyvisible --class modem-manager-gui windowquit
-
-# Clipboard
-# restart_process "clipmon" Not a process
-
-# Gestures
-restart_process "libinput-gestures" "libinput-gestures -c ~/.config/libinput-gestures/libinput-gestures.conf"
-
-# Theme manager
-# restart_process "xsettingsd" "xsettingsd -c /home/chooisfox/.config/bspwm/xsettingsd"
-
-# restart_process "snixembed" "snixembed --fork"
-
-# OTHER STUFF
-
-# Low battery notifier
-bash ~/.config/bspwm/scripts/notify_low_battery.sh &
-
-# Copy background for lightdm
-# cp ~/.config/background/mountain.png /usr/share/bspwm/background/background.png
-
-# Set default cursor
-xsetroot -cursor_name left_ptr
-
-# Keyboard layout (US/RU)
-setxkbmap -model pc104 -layout us,ru -variant qwerty -option grp:win_space_toggle
-
-# Dex (Autostart services)
-dex -a -s /etc/xdg/autostart/:~/.config/autostart/ &
-
-# Restart opened widnows
-#~/.config/bspwm/scripts/bspwm_session.sh -r
+if [ $OPTIND -eq 1 ]; then
+  echo "Usage: $0 [-r|-s]"
+  echo "  -r: Restore session"
+  echo "  -s: Save session"
+fi

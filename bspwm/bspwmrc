@@ -71,3 +71,6 @@ declare -A desktops=(
 
 # Load autostart script
 ~/.config/bspwm/autostart
+
+# Start subscribtions
+~/.config/bspwm/subscribe
