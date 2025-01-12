@@ -58,7 +58,6 @@ EOF
   fi
 }
 
-
 setup_monitor_hotplug() {
     local username
     username=$(whoami)
@@ -106,30 +105,6 @@ EOF
     else
         echo "Monitor setup script found at $monitor_setup_script."
     fi
-
-   echo "Installing lwp."
-  git clone https://github.com/jszczerbinsky/lwp /tmp/lwp
-  cd /tmp/lwp || exit
-
-  mkdir build
-  cd build || exit
-
-  cmake ../
-  cmake --build .
-  cpack
-
-  archive_name=$(find . -name "*.tar.gz" -print -quit)
-
-  if [ -z "$archive_name" ]; then
-    echo "Error: No .tar.gz archive found after cpack."
-    exit 1
-  fi
-
-  echo "Extracting archive: $archive_name"
-  sudo tar -o -xvf "$archive_name" -C /usr/local
-
-  echo "lwp installation complete (or extraction complete)."
-
     echo "Monitor hotplug setup completed. Reboot or replug monitors to test."
 }
 
@@ -153,11 +128,33 @@ install_pacman_packages() {
   )
 
   for entry in "${entries[@]}"; do
-      if ! grep -qF "$entry" "$environment_file"; then
-          echo "$entry" >> "$environment_file"
-      fi
-    done
+    if ! grep -qF "$entry" "$environment_file"; then
+      echo "$entry" >> "$environment_file"
+    fi
+  done
 
+  echo "Installing lwp."
+  git clone https://github.com/jszczerbinsky/lwp /tmp/lwp
+  cd /tmp/lwp || exit
+
+  mkdir build
+  cd build || exit
+
+  cmake ../
+  cmake --build .
+  cpack
+
+  archive_name=$(find . -name "*.tar.gz" -print -quit)
+
+  if [ -z "$archive_name" ]; then
+    echo "Error: No .tar.gz archive found after cpack."
+    exit 1
+  fi
+
+  echo "Extracting archive: $archive_name"
+  sudo tar -o -xvf "$archive_name" -C /usr/local
+
+  echo "lwp installation complete (or extraction complete)."
 }
 
 install_yay() {
