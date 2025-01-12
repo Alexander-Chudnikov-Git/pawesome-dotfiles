@@ -1,7 +1,7 @@
 #!/bin/bash
 
-PACMAN_PACKAGES=("base-devel" "acpi" "acpi_call" "nerd-fonts" "font-manager" "kitty" "firefox" "git" "wget" "curl" "mesa" "less" "qt5" "qt6" "python-pyqt5" "python-pyqt6" "xorg-xrandr" "picom" "polybar" "rofi" "dunst" "polkit-gnome" "network-manager-applet" "blueman" "udisks2" "thunar" "gvfs" "xarchiver" "thunar-archive-plugin" "thunar-media-tags-plugin" "thunar-shares-plugin" "thunar-volman" "tumbler" "libgsf" "webp-pixbuf-loader" "gvfs-mtp" "sshfs" "gvfs-smb" "udiskie" "flameshot" "dex" "xclip" "xsel" "gnome-themes-extra" "default-cursors" "neofetch")
-YAY_PACKAGES=("clipmon-git" "raw-thumbnailer" "tumbler-extra-thumbnailers" "libinput-gestures" "adwaita-qt6")
+PACMAN_PACKAGES=("base-devel" "udev" "xorg-xprop" "xdotool" "xdo" "acpi" "acpi_call" "brightnessctl" "pamixer" "nerd-fonts" "font-manager" "kitty" "firefox" "git" "wget" "curl" "mesa" "less" "qt5" "qt6" "python-pyqt5" "python-pyqt6" "xorg-xrandr" "picom" "polybar" "rofi" "dunst" "polkit-gnome" "network-manager-applet" "blueman" "udisks2" "thunar" "gvfs" "xarchiver" "thunar-archive-plugin" "thunar-media-tags-plugin" "thunar-shares-plugin" "thunar-volman" "tumbler" "libgsf" "webp-pixbuf-loader" "gvfs-mtp" "sshfs" "gvfs-smb" "udiskie" "flameshot" "dex" "xclip" "xsel" "gnome-themes-extra" "default-cursors" "neofetch")
+YAY_PACKAGES=("xkb-switch" "clipmon-git" "raw-thumbnailer" "tumbler-extra-thumbnailers" "libinput-gestures" "adwaita-qt6" "lite-xl" "lpm" "librewolf-bin" "simplescreenrecorder" "64gram-desktop")
 GPU_OVERRIDE=""
 
 add_kernel_parameter() {

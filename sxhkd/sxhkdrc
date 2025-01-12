@@ -160,11 +160,11 @@ super + shift + w
 
 # Start thunar
 super + n
-  thunar
+	thunar
 
 # Start thunar
 super + l
-  lite-xl
+	lite-xl
 
 # Screenshot
 Print
