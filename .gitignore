@@ -16,5 +16,6 @@
 !polybar/**
 !rofi/**
 !sxhkd/**
+!install.sh
 lite-xl/**
 lwp/log
