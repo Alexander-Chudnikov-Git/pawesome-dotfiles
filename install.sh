@@ -4,6 +4,10 @@ PACMAN_PACKAGES=("base-devel" "cmake" "libconfig" "sdl2" "udev" "xorg-xprop" "xd
 YAY_PACKAGES=("xkb-switch" "clipmon-git" "raw-thumbnailer" "tumbler-extra-thumbnailers" "libinput-gestures" "adwaita-qt6" "lite-xl" "lpm" "librewolf-bin" "simplescreenrecorder" "64gram-desktop")
 GPU_OVERRIDE=""
 
+command_exists() {
+  command -v "$1" >/dev/null 2>&1
+}
+
 add_kernel_parameter() {
   local parameter="$1"
   local bootloader
