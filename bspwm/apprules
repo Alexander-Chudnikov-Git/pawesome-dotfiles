@@ -19,7 +19,6 @@
 # ║                                                                                            ║
 # ╚════════════════════════════════════════════════════════════════════════════════════════════╝
 
-# Unified rule setup function with layer option
 apply_bspc_rules() {
     local state=$1
     local focus=$2
@@ -49,7 +48,9 @@ apply_bspc_rules floating on off 600x200+10+40 below \
     cava
 
 # Wallpaper
-bspc rule -a lwpwlp layer=below
+bspc rule -a lwpwlp state=fullscreen layer=below
+
+apply_bspc_rules floating off on 2240x1400+0+0 false above Xroachng
 
 # Floating media
 apply_bspc_rules floating on 500x300+1740+50 above sticky\

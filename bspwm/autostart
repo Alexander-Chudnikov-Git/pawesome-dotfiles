@@ -19,28 +19,39 @@
 # ║                                                                                            ║
 # ╚════════════════════════════════════════════════════════════════════════════════════════════╝
 
-# Function to kill and restart processes
+start_process() {
+    local process=$1
+    local command=${2:-$1}
+    if [[ ! $(pidof $process) ]]; then
+        $command &
+    fi
+}
+
 restart_process() {
     local process=$1
-    local command=${2:-$1}  # If no second argument, use the first as the command
-    killall -q "$process"
-    "$command" &
+    local command=${2:-$1}
+    if [[ ! $(pidof $process) ]]; then
+        killall -q $process
+    fi
+    start_process "$process" "$command"
 }
 
 # Compositor
-restart_process "picom" "picom --daemon --replace"
+restart_process "picom" "picom --daemon --realtime"
 
 # Notifications
-restart_process "dunst" "dunst --startup_notification"
+restart_process "dunst" "dunst"
 
 # Polkit
-restart_process "polkit-gnome-authentication-agent-1" "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+if [[ ! `pidof polkitd` ]]; then
+    /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+fi
 
 # Hotkeys
 pgrep -x sxhkd > /dev/null || restart_process "sxhkd"
 
 # Firewall
-restart_process "firewall-applet"
+restart_process "firewall-applet" "firewall-applet"
 
 # Network Applet
 restart_process "nm-applet" "nm-applet --indicator"
@@ -55,17 +66,30 @@ restart_process "thunar" "thunar --daemon"
 # Screenshot tool
 restart_process "flameshot"
 
-# OTD (on-the-desk daemon)
-restart_process "otd-daemon"
+# OTD
+# restart_process "otd-daemon"
 
 # Modem and SMS
-restart_process "modem-manager-gui" "modem-manager-gui" && xdotool search --onlyvisible --class modem-manager-gui windowquit
+if command -v modem-manager-gui &> /dev/null; then
+    sudo -u $USER killall -q modem-manager-gui
+    sudo -u $USER modem-manager-gui &
+
+    while ! xwininfo -root -tree | grep -q "modem-manager-gui"; do
+        sleep 0.01
+    done
+
+    xdotool search --onlyvisible --class modem-manager-gui windowquit
+fi
 
 # Clipboard
-# restart_process "clipmon" Not a process
+start_process "clipcatd"
+
+
+# Keyboarf layout changer
+#start_process "ibus-daemon" "ibus-daemon -rxRd"
 
 # Gestures
-restart_process "libinput-gestures" "libinput-gestures -c ~/.config/libinput-gestures/libinput-gestures.conf"
+restart_process "libinput-gestures" "libinput-gestures -c /home/$USER/.config/libinput-gestures/libinput-gestures.conf"
 
 # Theme manager
 # restart_process "xsettingsd" "xsettingsd -c /home/chooisfox/.config/bspwm/xsettingsd"
@@ -87,7 +111,7 @@ xsetroot -cursor_name left_ptr
 setxkbmap -model pc104 -layout us,ru -variant qwerty -option grp:win_space_toggle
 
 # Dex (Autostart services)
-dex -a -s /etc/xdg/autostart/:~/.config/autostart/ &
+# dex -a -s /etc/xdg/autostart/:~/.config/autostart/ &
 
 # Restart opened widnows
 #~/.config/bspwm/scripts/bspwm_session.sh -r

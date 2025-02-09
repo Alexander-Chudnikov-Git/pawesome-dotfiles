@@ -17,5 +17,6 @@
 !rofi/**
 !sxhkd/**
 !install.sh
+!clipcat/**
 lite-xl/**
 lwp/log

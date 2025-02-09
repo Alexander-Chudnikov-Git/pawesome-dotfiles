@@ -34,7 +34,7 @@ configuration {
 * {
   color:               @foreground-light;
   background-color:    @background-dark;
-  font:                "Iosevka Nerd Font Medium 10 10";
+  font:                "DejaVu Sans 11 11";
 }
 
 window {

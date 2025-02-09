@@ -111,7 +111,6 @@ super + shift + e
 super + shift + p
 	bash ~/.config/rofi/scripts/pacmanmenu.sh
 
-
 # # # # # # # # # # # # # # # # # # # Reload  applications # # # # # # # # # # # # # # # # # # #
 
 # Reload sxhkd configuration files:
@@ -269,6 +268,10 @@ super + alt + minus
     bspc config window_gap $(($(bspc config window_gap) - 5))
 
 ###################################################################
+
+# Fix middle button clearing clipboard
+~button2
+    ;echo -n | xclip -in
 
 #
 # state/flags
