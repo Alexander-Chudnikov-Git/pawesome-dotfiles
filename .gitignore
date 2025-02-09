@@ -1,4 +1,5 @@
 *
+**/README.md
 !*/
 !.gitignore
 !background/**
@@ -16,7 +17,8 @@
 !polybar/**
 !rofi/**
 !sxhkd/**
-!install.sh
 !clipcat/**
+!install.sh
+!/README.md
 lite-xl/**
 lwp/log
