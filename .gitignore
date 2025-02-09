@@ -1,5 +1,8 @@
 *
+**/.gitignore
+**/install.sh
 **/README.md
+**/LICENSE
 !*/
 !.gitignore
 !background/**
@@ -20,5 +23,6 @@
 !clipcat/**
 !install.sh
 !/README.md
+!/LICENSE
 lite-xl/**
 lwp/log
