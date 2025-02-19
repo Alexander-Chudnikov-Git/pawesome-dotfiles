@@ -19,47 +19,107 @@
 # ║                                                                                            ║
 # ╚════════════════════════════════════════════════════════════════════════════════════════════╝
 
-LOCK_FILE="/tmp/polybar_launcher.lock"
-
-source ~/.config/bspwm/scripts/common.sh
-
-main() {
-    if acquire_lock; then
-        export DISPLAY=":0"
-        #export XAUTHORITY="/home/${USER_NAME}/.Xauthority" # for sddm
-        export XAUTHORITY="/run/user/1000/lyxauth" # for ly
-
-        USER_NAME=$(id -un)
-        USER_ID=$(id -u)
-
-        export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${USER_ID}/bus"
-
-        # Kill existing polybar instances
-        killall -q polybar
-
-        # Wait for polybar to stop (up to 10 seconds)
-        for i in $(seq 1 10); do
-        if ! pgrep -u "$USER_ID" -x polybar >/dev/null; then
-            break
-        fi
-        sleep 1
-        done
-
-        # Iterate through monitors and launch polybar instances
-        polybar --list-monitors | cut -d":" -f1 | while read -r monitor; do
-        if xrandr -q | grep -wq "$monitor connected primary"; then
-            run_detached "$monitor" "polybar top -c \"/home/${USER_NAME}/.config/polybar/config.ini\""
-        else
-            run_detached "$monitor" "polybar top-no-tray -c \"/home/${USER_NAME}/.config/polybar/config.ini\""
-        fi
-
-        run_detached "$monitor" "polybar main -c \"/home/${USER_NAME}/.config/polybar/config.ini\""
-        done
-
-        release_lock
+# Logging
+get_calling_filename() {
+    if [[ ${#FUNCNAME[@]} -ge 3 ]]; then
+        echo "${BASH_SOURCE[2]}"
     else
-        exit 1
+        echo "${BASH_SOURCE[0]}"
     fi
 }
 
-main "$@"
+log_message() {
+    local message="$1"
+    local calling_file
+    calling_file=$(get_calling_filename)
+
+    local filename=$(basename "$calling_file")
+
+    logger -t "$filename" "$message"
+    echo "$message"
+}
+
+# Guard locks
+release_lock() {
+    rmdir "$LOCK_FILE"
+    echo "Lock released."
+}
+
+acquire_lock() {
+    if mkdir "$LOCK_FILE"; then
+        echo "Lock acquired."
+        trap release_lock INT TERM EXIT
+        return 0
+    else
+        echo "Another instance is already running. Exiting."
+        return 1
+    fi
+}
+
+# Process manipulation
+start_process() {
+    local process=$1
+    local command=${2:-$1}
+
+    echo "Startig process $process"
+
+    if [[ ! $(pgrep -x $process) ]]; then
+        $command &
+    fi
+}
+
+kill_process() {
+    local process=$1
+
+    echo "Killing process $process"
+
+    if [[ $(pgrep -x $process) ]]; then
+        killall -q $process
+    fi
+}
+
+restart_process() {
+    local process=$1
+    local command=${2:-$1}
+
+    kill_process "$process"
+    start_process "$process" "$command"
+}
+
+run_detached() {
+    local monitor="$1"
+    local command="$2"
+
+    if [ -z "$command" ]; then
+        return 1
+    fi
+
+    echo "Running on monitor '$monitor': $command"
+    MONITOR=$monitor nohup sh -c "$command" </dev/null >/dev/null 2>&1 &
+}
+
+# BSPC related stuff
+apply_bspc_rules() {
+    local state=$1
+    local focus=$2
+    local follow=$3
+    local sticky=$4
+    local rectangle=$5
+    local center=$6
+    local layer=$7
+
+    shift 7
+    log_message "├┐"
+
+    local last_app="${@: -1}" # Get the last application in the list
+
+    for app in "$@"; do
+        if [[ "$app" == "$last_app" ]]; then
+            log_message "│└ $app"
+        else
+            log_message "│├ $app"
+        fi
+        bspc rule -a "$app" state="$state" focus="$focus" follow="$follow" sticky="$sticky" rectangle="$rectangle" center="$center" layer="$layer"
+    done
+}
+

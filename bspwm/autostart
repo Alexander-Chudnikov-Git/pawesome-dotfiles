@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/bash
 
 # ╔════════════════════════════════════════════════════════════════════════════════════════════╗
 # ║                                                                                            ║
@@ -19,105 +19,119 @@
 # ║                                                                                            ║
 # ╚════════════════════════════════════════════════════════════════════════════════════════════╝
 
-start_process() {
-    local process=$1
-    local command=${2:-$1}
-    if [[ ! $(pgrep -x $process) ]]; then
-        $command &
+LOCK_FILE="/tmp/bspwm_autostart.lock"
+
+source ~/.config/bspwm/scripts/common.sh
+
+main() {
+    if acquire_lock; then
+        # ------------------------ MAIN SCRIPT LOGIC ------------------------
+
+        # --- Autostart services ---
+        # dex -a -s /etc/xdg/autostart/:~/.config/autostart/ &
+
+
+        # --- Polkit ---
+        log_message "├ Initializing polkit"
+        start_process "polkitd" "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+
+
+        # --- Graphics ---
+        log_message "├ Initializing graphics"
+
+        ## Compositor
+        start_process "picom" "picom --daemon --realtime"
+
+        # Copy background for lightdm (DO NOT USE THIS CRAP)
+        # cp ~/.config/background/mountain.png /usr/share/bspwm/background/background.png
+
+
+        # --- Notifications ---
+        log_message "├ Initializing notifications"
+
+        ## Notification daemon
+        restart_process "dunst" "dunst"
+
+        ## Embed status notifier items
+        restart_process "snixembed" "snixembed --fork"
+
+        ## Low battery notifier
+        bash ~/.config/bspwm/scripts/notify_low_battery.sh &
+
+
+        # --- Network ---
+        log_message "├ Initializing network applets"
+
+        ## Firewall
+        restart_process "firewall-applet" "firewall-applet"
+
+        ## Network Applet
+        restart_process "nm-applet" "nm-applet --indicator"
+
+        ## Bluetooth Applet
+        restart_process "blueman-applet"
+
+        ## ModemManager and SMS
+        if command -v modem-manager-gui &> /dev/null; then
+            sudo -u "$USER" killall -q modem-manager-gui
+            sudo -u "$USER" modem-manager-gui &
+
+            while ! xwininfo -root -tree | grep -q "modem-manager-gui"; do
+                sleep 0.01
+            done
+
+            xdotool search --onlyvisible --class modem-manager-gui windowquit
+        fi
+
+
+        # --- User inputs ---
+        log_message "├ Initializing user input helpers"
+
+        ## Hotkeys
+        restart_process "sxhkd"
+
+        ## Clipboard
+        start_process "clipcatd"
+
+        ## Gestures
+        restart_process "libinput-gestures" "libinput-gestures -c /home/$USER/.config/libinput-gestures/libinput-gestures.conf"
+
+        ## Tablet Drivers
+        # restart_process "otd-daemon"
+
+        ## Keyboarf layout changer (SOMETIMES IBUS BREAKS APPLICATIONS)
+        #start_process "ibus-daemon" "ibus-daemon -rxRd"
+
+        ## Keyboard layout (US/RU)
+        setxkbmap -model pc104 -layout us,ru -variant qwerty -option grp:win_space_toggle
+
+        ## Set default cursor
+        xsetroot -cursor_name left_pt
+
+        ## Theme manager
+        # restart_process "xsettingsd" "xsettingsd -c /home/chooisfox/.config/bspwm/xsettingsd"
+
+
+        # --- Other applications ---
+        log_message "├ Initializing other applications"
+        ## File manager auto mount service
+        restart_process "udiskie" "udiskie"
+
+        ## File manager daemon
+        restart_process "thunar" "thunar --daemon"
+
+        ## Screenshot tool
+        restart_process "flameshot"
+
+        ## Restart opened widnows (THIS SHIT IS BROKEN)
+        #~/.config/bspwm/scripts/bspwm_session.sh -r
+
+        # ------------------------ END MAIN SCRIPT LOGIC ------------------------
+        release_lock
+        exit 0
+    else
+        exit 1
     fi
 }
 
-kill_process() {
-    local process=$1
-    local command=${2:-$1}
-    if [[ $(pgrep -x $process) ]]; then
-        killall -q $process
-    fi
-}
-
-restart_process() {
-    local process=$1
-    local command=${2:-$1}
-
-    kill_process "$process" "$command"
-    start_process "$process" "$command"
-}
-
-# Compositor
-restart_process "picom" "picom --daemon --realtime"
-
-# Notifications
-restart_process "dunst" "dunst"
-
-# Polkit
-if [[ ! `pidof polkitd` ]]; then
-    /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
-fi
-
-# Hotkeys
-pgrep -x sxhkd > /dev/null || restart_process "sxhkd"
-
-# Firewall
-restart_process "firewall-applet" "firewall-applet"
-
-# Network Applet
-restart_process "nm-applet" "nm-applet --indicator"
-
-# Bluetooth
-restart_process "blueman-applet"
-
-# File manager daemon
-restart_process "udiskie" "udiskie"
-restart_process "thunar" "thunar --daemon"
-
-# Screenshot tool
-restart_process "flameshot"
-
-# OTD
-# restart_process "otd-daemon"
-
-# Modem and SMS
-if command -v modem-manager-gui &> /dev/null; then
-    sudo -u $USER killall -q modem-manager-gui
-    sudo -u $USER modem-manager-gui &
-
-    while ! xwininfo -root -tree | grep -q "modem-manager-gui"; do
-        sleep 0.01
-    done
-
-    xdotool search --onlyvisible --class modem-manager-gui windowquit
-fi
-
-# Clipboard
-start_process "clipcatd"
-
-# Keyboarf layout changer
-#start_process "ibus-daemon" "ibus-daemon -rxRd"
-
-# Gestures
-restart_process "libinput-gestures" "libinput-gestures -c /home/$USER/.config/libinput-gestures/libinput-gestures.conf"
-
-# Theme manager
-# restart_process "xsettingsd" "xsettingsd -c /home/chooisfox/.config/bspwm/xsettingsd"
-
-# restart_process "snixembed" "snixembed --fork"
-
-# OTHER STUFF
-
-# Low battery notifier
-bash ~/.config/bspwm/scripts/notify_low_battery.sh &
-
-# Copy background for lightdm
-# cp ~/.config/background/mountain.png /usr/share/bspwm/background/background.png
-
-# Set default cursor
-xsetroot -cursor_name left_ptr
-
-# Keyboard layout (US/RU)
-setxkbmap -model pc104 -layout us,ru -variant qwerty -option grp:win_space_toggle
-
-# Dex (Autostart services)
-# dex -a -s /etc/xdg/autostart/:~/.config/autostart/ &
-
-# Restart opened widnows
-#~/.config/bspwm/scripts/bspwm_session.sh -r
+main "$@"

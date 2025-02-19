@@ -19,22 +19,17 @@
 # ║                                                                                            ║
 # ╚════════════════════════════════════════════════════════════════════════════════════════════╝
 
-LOCKFILE="/tmp/hotplug-screen.lock"
+export DISPLAY=":0"
+export XAUTHORITY="/run/user/1000/lyxauth"
 
-lock_file() {
-    if [ -e "${LOCKFILE}" ] && kill -0 $(cat "${LOCKFILE}"); then
-        echo "Already running"
-        exit
-    fi
+USER_NAME=$(id -un)
+USER_ID=$(id -u)
 
-    trap "unlock_file" INT TERM EXIT
-    echo $$ > "${LOCKFILE}"
-}
+export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${USER_ID}/bus"
 
-unlock_file() {
-    sleep 1
-    rm -f "${LOCKFILE}"
-}
+LOCK_FILE="/tmp/hotplug_screen.lock"
+
+source ~/.config/bspwm/scripts/common.sh
 
 usage() {
     echo "usage: monitor_setup [monitor option]"
@@ -64,30 +59,6 @@ manage_monitor_mode() {
             export WINDOW_MODE="$value"
         fi
     fi
-}
-
-start_process() {
-    local process=$1
-    local command=${2:-$1}
-    if [[ ! $(pgrep -x $process) ]]; then
-        $command &
-    fi
-}
-
-kill_process() {
-    local process=$1
-    local command=${2:-$1}
-    if [[ $(pgrep -x $process) ]]; then
-        killall -q $process
-    fi
-}
-
-restart_process() {
-    local process=$1
-    local command=${2:-$1}
-
-    kill_process "$process" "$command"
-    start_process "$process" "$command"
 }
 
 get_max_resolution() {
@@ -135,86 +106,81 @@ remove_unconnected_monitors() {
             bspc monitor "$MONITOR" -r
         fi
     done
+    xrandr | grep " disconnected" | awk '{print $1}' | xargs -I {} xrandr --output {} --off
 }
 
 main() {
-    killall -q "polybar"
+    if acquire_lock; then
+        pgrep bspwm > /dev/null || exit 0
 
-    export DISPLAY=":0"
-    export XAUTHORITY="/run/user/1000/lyxauth"
+        XRANDR_OUTPUT=$(xrandr)
+        CONNECTED_MONITORS=$(echo "$XRANDR_OUTPUT" | grep " connected" | awk '{print $1}')
+        NUM_MONITORS=$(echo "$CONNECTED_MONITORS" | wc -l)
+        DEFAULT_DESKTOPS=("TERM" "MERG" "CODE" "WEBM" "EDIT" "MPTY" "CHAT" "LATX" "MUSI" "MISC")
 
-    USER_NAME=$(id -un)
-    USER_ID=$(id -u)
+        if [ $# -eq 0 ]; then
+            manage_monitor_mode
+        else
+            for i in "$@"; do
+                case $i in
+                    '-m'|'--mirror') WINDOW_MODE=0 ;;
+                    '-e'|'--extend') WINDOW_MODE=1 ;;
+                    '-h'|'--help'|'') usage ;;
+                    *) ;;
+                esac
+            done
+        fi
 
-    export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/${USER_ID}/bus"
+        echo "$(bspc query -M)"
 
-    pgrep bspwm > /dev/null || exit 0
+        if [ $WINDOW_MODE -eq 0 ]; then
+            MAIN_MONITOR_NAME=$(xrandr | grep -o "^.*primary" | awk '{print $1}')
+            MAIN_RESOLUTION=$(get_max_resolution "$MAIN_MONITOR_NAME")
 
-    XRANDR_OUTPUT=$(xrandr)
-    CONNECTED_MONITORS=$(echo "$XRANDR_OUTPUT" | grep " connected" | awk '{print $1}')
-    NUM_MONITORS=$(echo "$CONNECTED_MONITORS" | wc -l)
-    DEFAULT_DESKTOPS=("TERM" "MERG" "CODE" "WEBM" "EDIT" "MPTY" "CHAT" "LATX" "MUSI" "MISC")
+            xrandr --output "$MAIN_MONITOR_NAME" --mode "$MAIN_RESOLUTION" --pos 0x0 --scale 1x1 # Stupid xorg bug
+            echo "$MAIN_MONITOR_NAME $MAIN_RESOLUTION"
+            for MONITOR in $CONNECTED_MONITORS; do
+                if [ "$MONITOR" != "$MAIN_MONITOR_NAME" ]; then
+                    set_monitor_mirror "$MONITOR" "$MAIN_MONITOR_NAME" "$MAIN_RESOLUTION"
+                fi
+            done
+            bspc monitor "$MAIN_MONITOR_NAME" -d "${DEFAULT_DESKTOPS[@]}"
+        else
+            MAIN_MONITOR_DESKTOPS=$([ $NUM_MONITORS -gt 1 ] && echo 5 || echo 10)
+            OTHER_MONITOR_DESKTOPS=$([ $NUM_MONITORS -gt 1 ] && echo 5 || echo 0)
 
-    if [ $# -eq 0 ]; then
-        manage_monitor_mode
+            OFFSET=0
+            for MONITOR in $CONNECTED_MONITORS; do
+                MAX_RESOLUTION=$(get_max_resolution "$MONITOR")
+                set_monitor_resolution_with_offset "$MONITOR" $OFFSET
+
+                if [ "$MONITOR" = "$(echo "$CONNECTED_MONITORS" | head -n 1)" ]; then
+                    DESKTOPS=("${DEFAULT_DESKTOPS[@]:0:$MAIN_MONITOR_DESKTOPS}")
+                else
+                    DESKTOPS=("${DEFAULT_DESKTOPS[@]:$MAIN_MONITOR_DESKTOPS:$OTHER_MONITOR_DESKTOPS}")
+                fi
+                bspc monitor "$MONITOR" -d "${DESKTOPS[@]}"
+
+                WIDTH=$(echo "$MAX_RESOLUTION" | cut -d'x' -f1)
+                OFFSET=$((OFFSET + WIDTH))
+            done
+        fi
+
+        remove_unconnected_monitors "$CONNECTED_MONITORS"
+
+        start_process "/home/${USER_NAME}/.config/polybar/scripts/launch.sh"
+
+        # Wallpapers
+        # LWP
+        #kill_process "lwp"
+        #start_process "lwpwlp" "lwpwlp" # Yeah, this shit broke after 2.1 update
+
+        # Nitrogen
+        restart_process "nitrogen" "nitrogen --restore --set-auto"
+        release_lock
     else
-        for i in "$@"; do
-            case $i in
-                '-m'|'--mirror') WINDOW_MODE=0 ;;
-                '-e'|'--extend') WINDOW_MODE=1 ;;
-                '-h'|'--help'|'') usage ;;
-                *) ;;
-            esac
-        done
+        exit 1
     fi
-
-    echo "$(bspc query -M)"
-
-    if [ $WINDOW_MODE -eq 0 ]; then
-        MAIN_MONITOR_NAME=$(xrandr | grep -o "^.*primary" | awk '{print $1}')
-        MAIN_RESOLUTION=$(get_max_resolution "$MAIN_MONITOR_NAME")
-
-        xrandr --output "$MAIN_MONITOR_NAME" --mode "$MAIN_RESOLUTION" --pos 0x0 --scale 1x1 # Stupid xorg bug
-        echo "$MAIN_MONITOR_NAME $MAIN_RESOLUTION"
-        for MONITOR in $CONNECTED_MONITORS; do
-            if [ "$MONITOR" != "$MAIN_MONITOR_NAME" ]; then
-                set_monitor_mirror "$MONITOR" "$MAIN_MONITOR_NAME" "$MAIN_RESOLUTION"
-            fi
-        done
-        bspc monitor "$MAIN_MONITOR_NAME" -d "${DEFAULT_DESKTOPS[@]}"
-    else
-        MAIN_MONITOR_DESKTOPS=$([ $NUM_MONITORS -gt 1 ] && echo 5 || echo 10)
-        OTHER_MONITOR_DESKTOPS=$([ $NUM_MONITORS -gt 1 ] && echo 5 || echo 0)
-
-        OFFSET=0
-        for MONITOR in $CONNECTED_MONITORS; do
-            MAX_RESOLUTION=$(get_max_resolution "$MONITOR")
-            set_monitor_resolution_with_offset "$MONITOR" $OFFSET
-
-            if [ "$MONITOR" = "$(echo "$CONNECTED_MONITORS" | head -n 1)" ]; then
-                DESKTOPS=("${DEFAULT_DESKTOPS[@]:0:$MAIN_MONITOR_DESKTOPS}")
-            else
-                DESKTOPS=("${DEFAULT_DESKTOPS[@]:$MAIN_MONITOR_DESKTOPS:$OTHER_MONITOR_DESKTOPS}")
-            fi
-            bspc monitor "$MONITOR" -d "${DESKTOPS[@]}"
-
-            WIDTH=$(echo "$MAX_RESOLUTION" | cut -d'x' -f1)
-            OFFSET=$((OFFSET + WIDTH))
-        done
-    fi
-
-    remove_unconnected_monitors "$CONNECTED_MONITORS"
-
-    start_process "/home/${USER_NAME}/.config/polybar/scripts/launch.sh"
-
-    # Wallpapers
-    #kill_process "lwp" "lwp"
-    #start_process "lwpwlp" "lwpwlp" # Yeah, this shit broke after 2.1 update
-
-    # nitrogen
-    restart_process "nitrogen" "nitrogen --restore --set-auto"
 }
 
-lock_file
 main "$@"
-unlock_file

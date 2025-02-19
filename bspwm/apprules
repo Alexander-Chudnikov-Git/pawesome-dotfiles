@@ -19,56 +19,78 @@
 # ║                                                                                            ║
 # ╚════════════════════════════════════════════════════════════════════════════════════════════╝
 
-apply_bspc_rules() {
-    local state=$1
-    local focus=$2
-    local follow=$3
-    local rectangle=$4
-    local center=$5
-    local layer=$6
+LOCK_FILE="/tmp/bspwm_apprules.lock"
 
-    shift 6
-    for app in "$@"; do
-        bspc rule -a "$app" state="$state" focus="$focus" follow="$follow" rectangle="$rectangle" center="$center" layer="$layer"
-    done
+source ~/.config/bspwm/scripts/common.sh
+
+main() {
+    if acquire_lock; then
+        # ------------------------ MAIN SCRIPT LOGIC ------------------------
+
+        # --- Floating Apps ---
+        log_message "├ Applying rules for floaing apps"
+
+        apply_bspc_rules floating on on off 1000x600+0+0 true normal \
+            dolphin Dolphin URxvt Alacritty xterm xfce xfce4 Xfce4-terminal xfce4-terminal xdman-Main Lxappearance Gparted Thunar \
+            Viewnior Xarchiver Pavucontrol pavucontrol Nm-connection-editor Firewall-config firefox:Dialog firefox:Browser zenity \
+            firefox:Pop-up nitrogen Gpick Xgnokii:*
+
+
+        # --- Phone stuff ---
+        log_message "├ Applying rules for mobile networking"
+
+        apply_bspc_rules floating on on off 280x100+1960+1250 false normal \
+            Xgnokii:xgnokii Xgnokii:xgnokii:Options
+
+
+        # --- Decorative stuff ---
+        log_message "├ Applying rules for decorative stuff"
+
+        apply_bspc_rules floating on off off 600x200+10+40 false below \
+            cava
+
+
+        # --- Wallpaper ---
+        log_message "├ Applying rules for wallpapers"
+
+        bspc rule -a lwpwlp state=fullscreen layer=below
+
+        apply_bspc_rules floating off on off 2240x1400+0+0 false above \
+            Xroachng
+
+
+        # --- Floating media ---
+        log_message "├ Applying rules for floaring media"
+
+        apply_bspc_rules floating on off on 500x300+1740+50 false above \
+            *:*:Picture-in-picture *:*:Picture-in-Picture mpv
+
+        bspc rule -a mpv state=floating sticky=on
+        bspc rule -a *:*:Picture-in-picture state=floating sticky=on
+        bspc rule -a *:*:Picture-in-Picture state=floating sticky=on
+
+
+        # --- Private polybar rule ---
+        bspc rule -a polybar private
+
+
+        # --- Qt stuff ---
+        log_message "├ Applying rules for qt stuff"
+        apply_bspc_rules floating off off off 0x0 false normal \
+            side_drop_down_menu qt-docking-windows qt-ukr-categorizer Qt Docking Windows
+
+
+        # --- Warnings ---
+        log_message "├ Applying rules for warnings"
+        apply_bspc_rules floating on on off 500x250+0+0 true above \
+            zenity Yad Thunar:thunar:Attention
+
+        # ------------------------ END MAIN SCRIPT LOGIC ------------------------
+        release_lock
+        exit 0
+    else
+        exit 1
+    fi
 }
 
-# Floating Apps
-apply_bspc_rules floating on on 1000x600+0+0 true normal \
-    dolphin Dolphin URxvt Alacritty xterm xfce xfce4 Xfce4-terminal xfce4-terminal xdman-Main Lxappearance Gparted Thunar \
-    Viewnior Xarchiver Pavucontrol pavucontrol Nm-connection-editor Firewall-config firefox:Dialog firefox:Browser zenity \
-    firefox:Pop-up nitrogen Gpick Xgnokii:* Xgnokii:*
-
-# Phone stuff
-apply_bspc_rules floating on on 280x100+1960+1250 normal \
-    Xgnokii:xgnokii Xgnokii:xgnokii:Options
-
-# Start screen
-apply_bspc_rules floating on off 600x200+10+40 below \
-    cava
-
-# Wallpaper
-bspc rule -a lwpwlp state=fullscreen layer=below
-
-apply_bspc_rules floating off on 2240x1400+0+0 false above Xroachng
-
-# Floating media
-apply_bspc_rules floating on 500x300+1740+50 above sticky\
-    *:*:Picture-in-picture *:*:Picture-in-Picture mpv
-
-bspc rule -a mpv state=floating sticky=on
-bspc rule -a *:*:Picture-in-picture state=floating sticky=on
-bspc rule -a *:*:Picture-in-Picture state=floating sticky=on
-
-
-# Private polybar rule
-bspc rule -a polybar private
-
-# Qt stuff
-apply_bspc_rules floating off off 0x0 normal \
-    side_drop_down_menu qt-docking-windows qt-ukr-categorizer Qt Docking Windows
-
-# Warnings
-apply_bspc_rules floating on on 500x250+0+0 true above \
-    zenity Yad Thunar:thunar:Attention
-
+main "$@"
