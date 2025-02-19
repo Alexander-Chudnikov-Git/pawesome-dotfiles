@@ -98,7 +98,8 @@ run_detached() {
         return 1
     fi
 
-    echo "Running on monitor '$monitor': $command"
+    log_message "├─ Startig polybar: $command"
+
     MONITOR=$monitor nohup sh -c "$command" </dev/null >/dev/null 2>&1 &
 }
 

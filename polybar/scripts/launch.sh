@@ -25,6 +25,8 @@ source ~/.config/bspwm/scripts/common.sh
 
 main() {
     if acquire_lock; then
+        log_message "Initializing polybar"
+
         export DISPLAY=":0"
         #export XAUTHORITY="/home/${USER_NAME}/.Xauthority" # for sddm
         export XAUTHORITY="/run/user/1000/lyxauth" # for ly
@@ -37,23 +39,24 @@ main() {
         # Kill existing polybar instances
         killall -q polybar
 
-        # Wait for polybar to stop (up to 10 seconds)
+        # Wait for polybar to stop (up to 5 seconds)
         for i in $(seq 1 10); do
-        if ! pgrep -u "$USER_ID" -x polybar >/dev/null; then
-            break
-        fi
-        sleep 1
+            if ! pgrep -u "$USER_ID" -x polybar >/dev/null; then
+                break
+            fi
+            sleep 0.5
         done
 
         # Iterate through monitors and launch polybar instances
         polybar --list-monitors | cut -d":" -f1 | while read -r monitor; do
-        if xrandr -q | grep -wq "$monitor connected primary"; then
-            run_detached "$monitor" "polybar top -c \"/home/${USER_NAME}/.config/polybar/config.ini\""
-        else
-            run_detached "$monitor" "polybar top-no-tray -c \"/home/${USER_NAME}/.config/polybar/config.ini\""
-        fi
+            log_message "├ Creating instance for monitor: $monitor"
+            if xrandr -q | grep -wq "$monitor connected primary"; then
+                run_detached "$monitor" "polybar top -c \"/home/${USER_NAME}/.config/polybar/config.ini\""
+            else
+                run_detached "$monitor" "polybar top-no-tray -c \"/home/${USER_NAME}/.config/polybar/config.ini\""
+            fi
 
-        run_detached "$monitor" "polybar main -c \"/home/${USER_NAME}/.config/polybar/config.ini\""
+            run_detached "$monitor" "polybar main -c \"/home/${USER_NAME}/.config/polybar/config.ini\""
         done
 
         release_lock

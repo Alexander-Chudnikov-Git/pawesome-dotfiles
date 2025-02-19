@@ -131,14 +131,13 @@ main() {
             done
         fi
 
-        echo "$(bspc query -M)"
-
         if [ $WINDOW_MODE -eq 0 ]; then
+            log_message "Switching to monitor mirroring mode"
             MAIN_MONITOR_NAME=$(xrandr | grep -o "^.*primary" | awk '{print $1}')
             MAIN_RESOLUTION=$(get_max_resolution "$MAIN_MONITOR_NAME")
 
             xrandr --output "$MAIN_MONITOR_NAME" --mode "$MAIN_RESOLUTION" --pos 0x0 --scale 1x1 # Stupid xorg bug
-            echo "$MAIN_MONITOR_NAME $MAIN_RESOLUTION"
+
             for MONITOR in $CONNECTED_MONITORS; do
                 if [ "$MONITOR" != "$MAIN_MONITOR_NAME" ]; then
                     set_monitor_mirror "$MONITOR" "$MAIN_MONITOR_NAME" "$MAIN_RESOLUTION"
@@ -146,6 +145,7 @@ main() {
             done
             bspc monitor "$MAIN_MONITOR_NAME" -d "${DEFAULT_DESKTOPS[@]}"
         else
+            log_message "Switching to monitor extention mode"
             MAIN_MONITOR_DESKTOPS=$([ $NUM_MONITORS -gt 1 ] && echo 5 || echo 10)
             OTHER_MONITOR_DESKTOPS=$([ $NUM_MONITORS -gt 1 ] && echo 5 || echo 0)
 
@@ -170,13 +170,14 @@ main() {
 
         start_process "/home/${USER_NAME}/.config/polybar/scripts/launch.sh"
 
-        # Wallpapers
-        # LWP
+        # --- Wallpapers ---
+        log_message "┌ Initializing wallpapers"
+        ## Nitrogen
+        restart_process "nitrogen" "nitrogen --restore --set-auto"
+        ## LWP
         #kill_process "lwp"
         #start_process "lwpwlp" "lwpwlp" # Yeah, this shit broke after 2.1 update
 
-        # Nitrogen
-        restart_process "nitrogen" "nitrogen --restore --set-auto"
         release_lock
     else
         exit 1
