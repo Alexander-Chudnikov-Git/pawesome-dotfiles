@@ -22,17 +22,24 @@
 start_process() {
     local process=$1
     local command=${2:-$1}
-    if [[ ! $(pidof $process) ]]; then
+    if [[ ! $(pgrep -x $process) ]]; then
         $command &
+    fi
+}
+
+kill_process() {
+    local process=$1
+    local command=${2:-$1}
+    if [[ $(pgrep -x $process) ]]; then
+        killall -q $process
     fi
 }
 
 restart_process() {
     local process=$1
     local command=${2:-$1}
-    if [[ ! $(pidof $process) ]]; then
-        killall -q $process
-    fi
+
+    kill_process "$process" "$command"
     start_process "$process" "$command"
 }
 
@@ -83,7 +90,6 @@ fi
 
 # Clipboard
 start_process "clipcatd"
-
 
 # Keyboarf layout changer
 #start_process "ibus-daemon" "ibus-daemon -rxRd"

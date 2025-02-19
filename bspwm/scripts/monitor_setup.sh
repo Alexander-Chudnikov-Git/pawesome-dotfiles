@@ -66,11 +66,28 @@ manage_monitor_mode() {
     fi
 }
 
+start_process() {
+    local process=$1
+    local command=${2:-$1}
+    if [[ ! $(pgrep -x $process) ]]; then
+        $command &
+    fi
+}
+
+kill_process() {
+    local process=$1
+    local command=${2:-$1}
+    if [[ $(pgrep -x $process) ]]; then
+        killall -q $process
+    fi
+}
+
 restart_process() {
     local process=$1
     local command=${2:-$1}
-    killall "$process" &>/dev/null
-    "$command" &
+
+    kill_process "$process" "$command"
+    start_process "$process" "$command"
 }
 
 get_max_resolution() {
@@ -151,12 +168,14 @@ main() {
         done
     fi
 
+    echo "$(bspc query -M)"
+
     if [ $WINDOW_MODE -eq 0 ]; then
         MAIN_MONITOR_NAME=$(xrandr | grep -o "^.*primary" | awk '{print $1}')
         MAIN_RESOLUTION=$(get_max_resolution "$MAIN_MONITOR_NAME")
 
         xrandr --output "$MAIN_MONITOR_NAME" --mode "$MAIN_RESOLUTION" --pos 0x0 --scale 1x1 # Stupid xorg bug
-
+        echo "$MAIN_MONITOR_NAME $MAIN_RESOLUTION"
         for MONITOR in $CONNECTED_MONITORS; do
             if [ "$MONITOR" != "$MAIN_MONITOR_NAME" ]; then
                 set_monitor_mirror "$MONITOR" "$MAIN_MONITOR_NAME" "$MAIN_RESOLUTION"
@@ -186,10 +205,14 @@ main() {
 
     remove_unconnected_monitors "$CONNECTED_MONITORS"
 
-    
+    start_process "/home/${USER_NAME}/.config/polybar/scripts/launch.sh"
 
-    restart_process "lwp" "/home/${USER_NAME}/.config/polybar/scripts/launch.sh"
-    restart_process "lwpwlp" "/usr/local/bin/lwpwlp"
+    # Wallpapers
+    #kill_process "lwp" "lwp"
+    #start_process "lwpwlp" "lwpwlp" # Yeah, this shit broke after 2.1 update
+
+    # nitrogen
+    restart_process "nitrogen" "nitrogen --restore --set-auto"
 }
 
 lock_file
