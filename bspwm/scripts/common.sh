@@ -41,17 +41,21 @@ log_message() {
 
 # Guard locks
 release_lock() {
-    rmdir "$LOCK_FILE"
-    echo "Lock released."
+    if [ -d "$LOCK_FILE" ]; then
+        rmdir "$LOCK_FILE"
+        log_message "Lock released."
+    else
+        log_message "Lock file '$LOCK_FILE' does not exist.  Skipping release."
+    fi
 }
 
 acquire_lock() {
     if mkdir "$LOCK_FILE"; then
-        echo "Lock acquired."
+        log_message "Lock acquired."
         trap release_lock INT TERM EXIT
         return 0
     else
-        echo "Another instance is already running. Exiting."
+        log_message "Another instance is already running. Exiting."
         return 1
     fi
 }
@@ -63,7 +67,7 @@ start_process() {
 
     echo "├─ Startig process: $process"
 
-    if [[ ! $(pgrep -x $process) ]]; then
+    if [[ ! $(pgrep -f $process) ]]; then
         nohup sh -c "$command" </dev/null >/dev/null 2>&1 &
     fi
 }
@@ -73,7 +77,7 @@ kill_process() {
 
     echo "├─ Killing process: $process"
 
-    if [[ $(pgrep -x $process) ]]; then
+    if [[ $(pgrep -f $process) ]]; then
         killall -q $process
     fi
 }
