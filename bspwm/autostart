@@ -74,7 +74,7 @@ main() {
         ## ModemManager and SMS
         if command -v modem-manager-gui &> /dev/null; then
             sudo -u "$USER" killall -q modem-manager-gui
-            sudo -u "$USER" modem-manager-gui &
+            sudo -u "$USER" nohup sh -c modem-manager-gui </dev/null >/dev/null 2>&1 &
 
             while ! xwininfo -root -tree | grep -q "modem-manager-gui"; do
                 sleep 0.01

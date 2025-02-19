@@ -61,17 +61,17 @@ start_process() {
     local process=$1
     local command=${2:-$1}
 
-    echo "Startig process $process"
+    echo "├─ Startig process: $process"
 
     if [[ ! $(pgrep -x $process) ]]; then
-        $command &
+        nohup sh -c "$command" </dev/null >/dev/null 2>&1 &
     fi
 }
 
 kill_process() {
     local process=$1
 
-    echo "Killing process $process"
+    echo "├─ Killing process: $process"
 
     if [[ $(pgrep -x $process) ]]; then
         killall -q $process
