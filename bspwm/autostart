@@ -106,7 +106,7 @@ main() {
         setxkbmap -model pc104 -layout us,ru -variant qwerty -option grp:win_space_toggle
 
         ## Set default cursor
-        xsetroot -cursor_name left_pt
+        xsetroot -cursor_name left_ptr
 
         ## Theme manager
         # restart_process "xsettingsd" "xsettingsd -c /home/chooisfox/.config/bspwm/xsettingsd"
