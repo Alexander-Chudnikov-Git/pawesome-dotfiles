@@ -176,6 +176,14 @@ shift + Print
 super + shift + Print
 	simplescreenrecorder
 
+# Screen saver activate
+super + End
+	xscreensaver-command -activate
+
+# Screen saver lock
+super + shift + End
+	xscreensaver-command -lock
+
 
 # # # # # # # # # # # # # # # # # # # Function key mapping # # # # # # # # # # # # # # # # # # #
 

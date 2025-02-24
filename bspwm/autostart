@@ -33,7 +33,7 @@ main() {
 
         # --- Polkit ---
         log_message "├ Initializing polkit"
-        start_process "polkitd" "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+        start_process "polkit-gnome-authentication-agent-1" "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
 
 
         # --- Graphics ---
@@ -122,6 +122,9 @@ main() {
 
         ## Screenshot tool
         restart_process "flameshot"
+
+        ## Start screen saver
+        restart_process "xscreensaver" "xscreensaver --no-splash"
 
         ## Restart opened widnows (THIS SHIT IS BROKEN)
         #~/.config/bspwm/scripts/bspwm_session.sh -r
